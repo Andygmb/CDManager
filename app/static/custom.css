@@ -1,0 +1,49 @@
+.active-mag a, .road-blocked-mag a {
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.active-mag {
+	background-color: rgb(180, 233, 187);
+}
+
+.active-mag td, .active-mag a {
+	color: rgb(32, 88, 41);
+}
+
+.active-mag a:hover {
+	color: rgb(16, 45, 21)
+}
+
+.road-blocked-mag {
+	background-color: rgb(255, 190, 188);
+}
+
+.road-blocked-mag td, .road-blocked-mag a {
+	color: rgb(114, 46, 45);
+}
+
+.inline {
+	display:inline;
+}
+
+.edit{
+	margin-bottom:6px;
+}
+
+.main-info {
+	margin-top: 60px;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+table tbody .active-mag, table tbody .road-blocked-mag {
+	border-top: 3px solid white;
+	border-bottom: 3px solid white;
+}
+
+table tbody .active-mag td, table tbody .road-blocked-mag td {
+	padding: 12px;
+}

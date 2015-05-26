@@ -1,0 +1,90 @@
+{% extends "bootstrap/base.html" %}
+
+{% block scripts %}
+
+	{{ super() }}
+
+	{{ moment.include_jquery() }}
+
+	{{ moment.include_moment() }}
+
+{% endblock %}
+
+{% block styles %}
+
+	{{ super() }}
+
+	<link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+
+{% endblock %}
+
+{% block title %}Management System{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" 
+			data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="sr-only">Toggle Navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="{{ url_for('all_magazines') }}">CDManager</a>
+		</div>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li><a href="{{ url_for('all_magazines') }}">Home</a></li>
+				<li class="dropdown">
+				<a href="#" data-toggle="dropdown" class="dropdown-toggle">Clients <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+				        <li><a href="{{ url_for('all_clients') }}">All Clients</a></li>
+				        <li><a href="{{ url_for('add_client') }}">Add Client</a></li>
+				    </ul>
+				</li>
+				<li class="dropdown">
+				<a href="#" data-toggle="dropdown" class="dropdown-toggle">Magazines <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+				        <li><a href="{{ url_for('all_magazines') }}">All Magazines</a></li>
+				        <li><a href="{{ url_for('add_magazine') }}">Add Magazine</a></li>
+				    </ul>
+				</li>
+				<li class="dropdown">
+				<a href="#" data-toggle="dropdown" class="dropdown-toggle">Tasks <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+				        <li><a href="{{ url_for('all_tasks') }}">All Tasks</a></li>
+				        <li><a href="{{ url_for('add_task') }}">Add Task</a></li>
+				    </ul>
+				</li>
+				<li class="dropdown">
+				<a href="#" data-toggle="dropdown" class="dropdown-toggle">Users <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+				        <li><a href="{{ url_for('all_users') }}">All Users</a></li>
+				        <li><a href="{{ url_for('add_user') }}">Add User</a></li>
+				    </ul>
+				</li>
+				{% if current_user.is_authenticated() %}
+					<li><a href="{{ url_for('logout') }}">Sign Out</a></li>
+				{% else %}
+					<li><a href="{{ url_for('login') }}">Sign In</a></li>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+</nav>
+
+{% for message in get_flashed_messages() %}
+<div class="container">
+	<div class="alert alert-warning">
+		<button type="button" class="close" data-dismiss"alert">&times;</button>
+		{{ message }}
+	</div>
+</div>
+{% endfor %}
+
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}

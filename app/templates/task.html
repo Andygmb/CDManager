@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+
+  <h2 class="inline">{{ task.name }}
+  <small><a href="{{ url_for('edit_task', id=task.id) }}"> (Edit Task)</a></small></h2>
+  <h4><a href="{{ url_for('client', id=task.magazine.owner.id) }}">{{ task.magazine.owner }}</a></h4>
+  <h4><a href="{{ url_for('magazine', id=task.magazine.id) }}">{{ task.magazine.name }}</a></h4>
+
+	
+  <h4 class="main-info">Task Info</h4>
+  <table class="table">
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Due Date</th>
+          <th>Assigned To</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="{{ task.status }}-mag">
+          <td>{{ task.description }}</td>
+          <td>{{ moment(task.due_date).format('MMMM Do YYYY') }}</td>
+          <td>{% if task.employee %}<a href="{{ url_for('user', id=task.employee.id) }}">{{ task.employee.name }}</a>{% endif %}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4 class="main-info">Task Notes</h4>
+    {{ task.note }}
+	
+</div>
+{% endblock %}

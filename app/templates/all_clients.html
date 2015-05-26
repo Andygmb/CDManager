@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+
+	<table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Contact</th>
+          <th>Address</th>
+          <th>Phone</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for client in clients %}
+        <tr>
+          <td><a href="{{ url_for('client', id=client.id) }}">{{ client.name }}</a></td>
+          <td>{{ client.contact }}</td>
+          <td>{{ client.address }}</td>
+          <td>{{ client.phone }}</td>
+          <td>{{ client.note }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+	
+</div>
+{% endblock %}

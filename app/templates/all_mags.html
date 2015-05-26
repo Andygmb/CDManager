@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+
+	<table class="table">
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Magazine Name</th>
+          <th>Pages</th>
+          <th>Contact</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for mag in magazines %}
+        <tr class="{{ mag.status }}-mag">
+          <td><a href="{{ url_for('client', id=mag.owner.id) }}">{{ mag.owner.name }}</a></td>
+          <td><a href="{{ url_for('magazine', id=mag.id) }}">{{ mag.name }}</a></td>
+          <td>{{ mag.pages }}</td>
+          <td><a href="mailto:{{ mag.owner.email }}">{{ mag.owner.contact }}</a></td>
+          <td>{{ mag.note }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+</div>
+{% endblock %}

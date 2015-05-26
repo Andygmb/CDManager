@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+
+  <h2 class="inline">{{ mag.name }} 
+  <small><a href="{{ url_for('edit_magazine', id=mag.id) }}"> (Edit Magazine)</a></small></h2>
+  <h3><a href="{{ url_for('client', id=mag.owner.id) }}">{{ mag.owner }}</a></h3>
+
+
+  <h4 class="main-info">Magazine Info</h4>
+  <table class="table">
+      <thead>
+        <tr>
+          <th>Contact</th>
+          <th>Email</th>
+          <th>Address</th>
+          <th>Phone</th>
+          <th>Pages</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ mag.owner.contact }}</td>
+          <td><a href="mailto: {{ mag.owner.email }}">{{ mag.owner.email }}</a></td>
+          <td>{{ mag.owner.address }}</td>
+          <td>{{ mag.owner.phone }}</td>
+          <td>{{ mag.pages }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    {% if mag.note %}
+      <h2>Notes</h2>
+      {{ mag.note }}
+    {% endif %}
+
+  <h4 class="main-info">Tasks</h4>
+  <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Due Date</th>
+          <th>Assigned To</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for task in mag.tasks %}
+        <tr class="{{ task.status }}-mag">
+          <td><a href="{{ url_for('task', id=task.id) }}">{{ task.name }}</a></td>
+          <td>{{ task.description }}</td>
+          <td>{{ moment(task.due_date).format('MMMM Do YYYY') }}</td>
+          <td><a href="{{ url_for('user', id=task.employee.id) }}">{{ task.employee.name }}</a></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  
+</div>
+{% endblock %}

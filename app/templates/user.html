@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+
+  <h1>{{ user.name }} - <a href="{{ url_for('edit_user', id=user.id) }}">Edit User</a></h1>
+
+	<table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Task Description</th>
+          <th>Due Date</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for task in user.tasks %}
+        <tr>
+          <td>{{ task.name }}</td>
+          <td>{{ task.description }}</td>
+          <td>{{ task.due_date }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+	
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+
+	<table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Magazine Name</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for mag in magazines %}
+        <tr>
+          <td><a href="{{ url_for('client', id=mag.owner.id) }}">{{ mag.owner.name }}</a></td>
+          <td><a href="{{ url_for('magazine', id=mag.id) }}">{{ mag.name }}</a></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+	
+</div>
+{% endblock %}

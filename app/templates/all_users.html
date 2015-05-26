@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+
+	<h4 class="main-info">User's Tasks</h4>
+	<table class="table">
+		<thead>
+	        <tr>
+	        	<th>User</th>
+	        	<th>Magazine</th>
+	        	<th>Assigned Tasks</th>
+	        	<th>Task Descriptions</th>
+	        </tr>
+	     </thead>
+	     <tbody>
+	     {% for user in users %}
+	     	<tr>
+	     		<td><a href="{{ url_for('user', id=user.id) }}">{{ user }}</a></td>
+		     	{% for task in user.tasks %}
+		     	<tr class="{{ task.status }}-mag">
+		     		<td></td>
+		     		<td><a href="{{ url_for('magazine', id=task.magazine.id) }}">{{ task.magazine.client_mag }}</a></td>
+					<td><a href="{{ url_for('task', id=task.id) }}">{{ task.name }}</a></td>	  
+	   				<td>{{ task.description }}</td>
+     			</tr>
+         		{% endfor %}
+	        </tr>
+       {% endfor %}
+	    </tbody>
+	</table>
+
+</div>
+{% endblock %}
