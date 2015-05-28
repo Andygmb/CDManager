@@ -54,7 +54,9 @@ From here you should be good to go. For instructions on using the application re
 
 # Using the application
 
-## Add a new client
+## Adding a...
+
+### Client
 
 1. Go to the 'Clients' tab at the top of the page
 2. Select 'Add Client'
@@ -66,7 +68,7 @@ From here you should be good to go. For instructions on using the application re
 8. Enter any additional notes about the client.
 9. Submit
 
-## Add a new magazine
+### Magazine
 
 *Note: To add a new _magazine_ you must first have a _client_ to assign it to.*
 
@@ -79,7 +81,7 @@ From here you should be good to go. For instructions on using the application re
 7. Enter any additional notes about the magazine
 8. Submit
 
-## Add a new task
+### Task
 
 *Note: To add a new _task_ you must first have an _magazine_ and a _user_ of which to assign it.*
 
@@ -93,7 +95,7 @@ From here you should be good to go. For instructions on using the application re
 8. Enter any additional notes about the task
 9. Submit
 
-## Add a new user
+### User
 
 1. Go to the 'Users' tab at the top of the page
 2. Select 'Add User'
@@ -104,5 +106,92 @@ From here you should be good to go. For instructions on using the application re
 7. Enter the last name of the user
 8. Submit
 
+## What you get in each view
+
+### All Clients
+
+|Name         | Contact             | Address         | Phone | Note            |
+|-------------|---------------------|-----------------|-------|-----------------|
+|Company Name | Contact Person Name | Company Address | Phone | Additional Notes|
+
+The company name is also linked so you can get a view of all of the information about that individual company including all of their magazines and all of their active tasks.
+
+### Specific Client
+
+Client Info (Link to edit client)
+
+|Contact             | Email         | Address         | Phone | Active                              |
+|--------------------|---------------|-----------------|-------|-------------------------------------|
+|Contact Person Name | Contact Email | Company Address | Phone | Whether the client is active or not |
+
+Client Notes
+
+Any additional notes written about the client.
+
+Magazines
+
+|Name          | Sales Person      | Pages      | Published                         |
+|--------------|-------------------|------------|-----------------------------------|
+|Magazine Name | Sales Person Name | # of Pages | Whether the magazine is published |
+
+**Note: Each magazine is also color coded. The magazine will be green if all of the active tasks are running smoothly. It will switch to red if any of the tasks have been marked as _'Road Blocked'_.**
+
+### All Magazines
+
+|Company      | Magazine Name | Pages      | Contact        | Notes            |
+|-------------|---------------|------------|----------------|------------------|
+|Company Name | Magazine Name | # of Pages | Contact Person | Additional Notes |
+
+**Note: The _Company_ field will link directly to that _Client_'s page. The _Magazine Name_ field will link directly to that specific magazine's page. The _Contact_ field will create a clickable link that will open a new email to that person.**
+
+**The rows are also color coded. The row will be green if all of the tasks are running smoothly. It will switch to red if any of the tasks have been marked as _'Road Blocked'_.**
+
+### Specific Magazine
+
+Magazine Name (Link to edit magazine)
+Company Name (Linked to that company's specific page)
 
 
+Magazine Info
+
+|Contact             | Email         | Address         | Phone | Pages                               |
+|--------------------|---------------|-----------------|-------|-------------------------------------|
+|Contact Person Name | Contact Email | Company Address | Phone | Whether the client is active or not |
+
+Notes
+Any notes for the magazine
+
+Tasks
+
+|Name      | Description      | Due Date | Assigned To                  |
+|----------|------------------|----------|------------------------------|
+|Task Name | Task Description | Due Data | User the task is assigned to |
+
+**Note: The _Name_ field will also link to the individual _Task_'s page. The _Assigned To_ field will also link directly to that specific _User_'s page so you can see what that _User_ currently has assigned to them.**
+
+### All Users
+
+User's Tasks
+
+|User      | Magazine             | Assigned Tasks | Task Descriptions   |
+|----------|----------------------|----------------|---------------------|
+|User Name | Magazine task is for | Task Name      | Description of task |
+|          | Magazine task is for | Task Name      | Description of task |
+|Next User | Magazine task is for | Task Name      | Description of task |
+|          | Magazine task is for | Task Name      | Description of task |
+
+**Note: The system will show every _Task_ for a specific _User_ and then show the next _User_ and all of their tasks.**
+
+**The _User_ field will link to that specific _User_'s page. The _Magazine_ field will link directly to that specific _Magazine_'s page. The _Assigned_ _Task_'s field will link directly to that specific _Task_'s page.**
+
+**The rows are also color coded. They will be green if they are active or red if the _Task_ is "_Road Blocked_".**
+
+### Specific User
+
+User Name - (Link to edit user)
+
+|Task      | Task Description | Due Date |
+|----------|------------------|----------|
+|Task Name | Task description | Due Date |
+
+**Note: The _Task_ field will link directly to that specific _Task_'s page.**
