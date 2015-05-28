@@ -50,3 +50,59 @@ The site currently uses Flask-SQLAlchemy for database management, by default it 
 
 **Note: This does not store your password in plaintext. The application will automatically encrypt using _Werkzeug.Security_**
 
+From here you should be good to go. For instructions on using the application refer to the following section.
+
+# Using the application
+
+## Add a new client
+
+1. Go to the 'Clients' tab at the top of the page
+2. Select 'Add Client'
+3. Enter the company name
+4. Enter their address
+5. Enter the main contact person's name
+6. Enter their email address
+7. Enter their phone number
+8. Enter any additional notes about the client.
+9. Submit
+
+## Add a new magazine
+
+*Note: To add a new _magazine_ you must first have a _client_ to assign it to.*
+
+1. Go to the 'Magazines' tab at the top of the page
+2. Select 'Add Magazine'
+3. Select the client the magazine is for, leave the published status as 'Not Published' unless the magazine is already completed.
+4. Enter the magazine name (e.g. 'Comfort Zone', 'Degrees')
+5. Enter the name of the sales person
+6. Enter the page count of the magazine
+7. Enter any additional notes about the magazine
+8. Submit
+
+## Add a new task
+
+*Note: To add a new _task_ you must first have an _magazine_ and a _user_ of which to assign it.*
+
+1. Go to the 'Tasks' tab at the top of the page
+2. Select 'Add Task'
+3. Select the magazine from the dropdown (Note: This will only show magazines which are not set as 'Published')
+4. Set the status of the task
+5. Enter a task name
+6. Enter a description of what the task entails
+7. Enter a due date (Use the format: MM/DD/YYYY)
+8. Enter any additional notes about the task
+9. Submit
+
+## Add a new user
+
+1. Go to the 'Users' tab at the top of the page
+2. Select 'Add User'
+3. Enter the email address of the user
+4. Enter the password
+5. Confirm the password
+6. Enter the first name of the user
+7. Enter the last name of the user
+8. Submit
+
+
+
