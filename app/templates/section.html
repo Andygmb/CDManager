@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+
+  <h2 class="inline">{{ section.name }}
+  <small><a href="{{ url_for('edit_section', id=section.id) }}"> (Edit Section)</a></small></h2>
+  <h4><a href="{{ url_for('client', id=section.owner.id) }}">{{ section.owner.name }}</a></h4>
+  <h4><a href="{{ url_for('magazine', id=section.magazine.id) }}">{{ section.magazine.name }}</a></h4>
+
+	
+  <h4 class="main-info">Section Info</h4>
+  <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="{{ section.status }}-mag">
+          <td>{{ section.name }}</td>
+          <td>{{ section.description }}
+          <td>{{ section.note }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4 class="main-info">Tasks in this Section</h4>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Project</th>
+          <th>Section</th>
+          <th>Task Name</th>
+          <th>Description</th>
+          <th>Additional Notes</th>
+          <th>Due Date</th>
+          <th>Assigned To</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for task in section.tasks %}
+        <tr class="{{ task.status }}-mag">
+          <td><a href="{{ url_for('client', id=section.magazine.owner.id) }}">{{ section.magazine.owner }}</a></td>
+          <td><a href="{{ url_for('magazine', id=section.magazine.id) }}">{{ section.magazine.name }}</a></td>
+          <td><a href="{{ url_for('section', id=task.section.id) }}">{{ task.section.name }}</a></td>
+          <td><a href="{{ url_for('task', id=task.id) }}">{{ task.name }}</a></td>
+          <td>{{ task.description }}</td>
+          <td>{{ task.note }}</td>
+          <td>{{ moment(task.due_date).format('MMMM Do YYYY') }}</td>
+          <td>{% if task.employee.id %}<a href="{{ url_for('user', id=task.employee.id) }}">{{ task.employee.name }}</a>{% endif %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+	
+</div>
+{% endblock %}

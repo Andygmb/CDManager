@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+
+
+	<table class="table">
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Project</th>
+          <th>Name</th>
+          <th>Additional Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for section in sections %}
+        <tr class="{{ section.status }}-mag">
+          <td><a href="{{ url_for('client', id=section.owner.id) }}">{{ section.owner }}</a></td>
+          <td><a href="{{ url_for('magazine', id=section.magazine.id) }}">{{ section.magazine.name }}</a></td>
+          <td><a href="{{ url_for('section', id=section.id) }}">{{ section.name }}</a></td>
+          <td>{{ section.note }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+	
+</div>
+{% endblock %}
