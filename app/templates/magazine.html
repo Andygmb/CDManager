@@ -36,6 +36,26 @@
       {{ mag.note }}
     {% endif %}
 
+  <h4 class="main-info">Sections</h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Additional Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for section in mag.sections %}
+      <tr class="{{ section.status }}-mag">
+        <td><a href="{{ url_for('section', id=section.id) }}">{{ section.name }}</a></td>
+        <td>{{ section.description }}</td>
+        <td>{{ section.note }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
   <h4 class="main-info">Tasks</h4>
   <table class="table">
       <thead>

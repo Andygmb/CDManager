@@ -1,8 +1,8 @@
 from flask import render_template, flash, redirect, session, url_for, request
 from flask.ext.login import login_user, logout_user, login_required
 from app import app, db
-from models import User, Magazine, Client, Task
-from forms import EditUser, EditClient, EditMag, EditMag, EditTask, LogIn
+from models import User, Client, Magazine, Section, Task
+from forms import EditUser, EditClient, EditMag, EditMag, EditSection, EditTask, LogIn
 from datetime import datetime
 
 
@@ -35,20 +35,24 @@ def add_user():
 	form = EditUser()
 
 	if form.validate_on_submit():
-
 		user = User.query.filter_by(email=form.email.data).first()
 
 		if user is None:
-			user = User(email=form.email.data, password=form.password.data, \
-				first_name=form.first_name.data, last_name=form.last_name.data, \
-				name='{} {}'.format(form.first_name.data, form.last_name.data))
+			user = User(email=form.email.data, 
+						password=form.password.data, 
+						first_name=form.first_name.data, 
+						last_name=form.last_name.data, 
+						role=form.role.data, 
+						name='{} {}'.format(form.first_name.data, form.last_name.data))
+
 			db.session.add(user)
 			db.session.commit()
 			flash('User succesfully added.')
+
 			return redirect(url_for('all_users'))
 
 		else:
-			flash(str(user))
+			flash('That user already exists.')
 
 	return render_template('form.html', form=form)
 
@@ -62,8 +66,23 @@ def add_client():
 		client = Client.query.filter_by(name=form.name.data).first()
 
 		if client is None:
-			client = Client(name=form.name.data, contact=form.contact.data, email=form.email.data, \
-				address=form.address.data, phone=form.phone.data, note=form.note.data, active=1)
+			client = Client(name=form.name.data, 
+							owner=form.owner.data, 
+							owner_email=form.owner_email.data, 
+							owner_phone=form.owner_phone.data,
+							address=form.address.data, 
+							note=form.note.data)
+
+			if not client.contact:
+				client.contact = form.owner.data
+				client.email = form.owner_email.data
+				client.phone = form.owner_phone.data
+
+			else:
+				client.contact = form.contact.data
+				client.email = form.email.data
+				client.phone = form.phone.data
+
 			db.session.add(client)
 			db.session.commit()
 			flash('Client successfully added.')
@@ -82,13 +101,37 @@ def add_magazine():
 	form = EditMag()
 
 	if form.validate_on_submit():
-		mag = Magazine(name=form.name.data, owner=form.owner.data, sales_person=form.sales_person.data, \
-			pages=form.pages.data, client_mag=str(form.owner.data) + ' - ' + str(form.name.data), \
-			active=True, note=form.note.data)
+		mag = Magazine(name=form.name.data, 
+						owner=form.owner.data, 
+						sales_person=form.sales_person.data, 
+						pages=form.pages.data, 
+						client_mag=str(form.owner.data) + ' - ' + str(form.name.data), 
+						note=form.note.data)
+
 		db.session.add(mag)
 		db.session.commit()
 		flash('Magazine successfully added.')
 		return redirect(url_for('all_magazines'))
+
+	return render_template('form.html', form=form)
+
+@app.route('/add/section', methods=['GET', 'POST'])
+@login_required
+def add_section():
+	form = EditSection()
+
+	if form.validate_on_submit():
+		section = Section(magazine=form.magazine.data,
+							owner=form.client.data,
+							name=form.name.data,
+							description=form.description.data,
+							note=form.note.data
+							)
+
+		db.session.add(section)
+		db.session.commit()
+		flash('Section successfully added.')
+		return redirect(url_for('all_sections'))
 
 	return render_template('form.html', form=form)
 
@@ -100,9 +143,13 @@ def add_task():
 
 	if form.validate_on_submit():
 
-		task = Task(name=form.name.data, description=form.description.data,\
-			create_date=datetime.utcnow(), status=form.status.data, magazine=form.magazine.data, \
-			note=form.note.data, employee=form.employee.data)
+		task = Task(name=form.name.data, 
+					description=form.description.data, 
+					create_date=datetime.utcnow(), 
+					status=form.status.data, 
+					section=form.section.data, 
+					note=form.note.data, 
+					employee=form.employee.data)
 
 		db.session.add(task)
 		db.session.commit()
@@ -149,11 +196,21 @@ def edit_client(id):
 
 		if form.validate_on_submit():
 			client.name = form.name.data
-			client.email = form.email.data
-			client.contact = form.contact.data
+			client.owner = form.owner.data
+			client.owner_email = form.owner_email.data
+			client.owner_phone = form.owner_phone.data
 			client.address = form.address.data
-			client.phone = form.phone.data
 			client.note = form.note.data
+
+			if not client.contact:
+				client.contact = form.owner.data
+				client.email = form.owner_email.data
+				client.phone = form.owner_phone.data
+
+			else:
+				client.contact = form.contact.data
+				client.email = form.email.data
+				client.phone = form.phone.data
 			
 			db.session.commit()
 			flash('Client successfully edited.')
@@ -194,6 +251,32 @@ def edit_magazine(id):
 	return redirect(url_for('all_magazines'))
 
 
+@app.route('/edit/section/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_section(id):
+	section = Section.query.get(id)
+
+	if section is not None:
+		form = EditSection(obj=section)
+
+		if form.validate_on_submit():
+
+			section.magazine = form.magazine.data
+			section.client = form.client.data
+			section.name = form.name.data
+			section.note = form.note.data
+
+			db.session.commit()
+
+			flash('Section edited successfully.')
+			return redirect(url_for('section', id=id))
+
+		return render_template('form.html', form=form)
+
+	flash('That section does not exist.')
+	return redirect(url_for('all_magazines'))
+
+
 @app.route('/edit/task/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_task(id):
@@ -208,18 +291,25 @@ def edit_task(id):
 			task.description = form.description.data
 			task.status = form.status.data
 			task.due_date = form.due_date.data
-			task.magazine = form.magazine.data
+			task.section = form.section.data
 			task.employee = form.employee.data
 			task.note = form.note.data
 
-			tasks = Task.query.filter_by(magazine=form.magazine.data).all()
+			#Review this section it's. It seems really hacky.
+			section = form.section.data
 
-			for task in tasks:
-				if task.status == 'road-blocked':
-					task.magazine.status = 'road-blocked'
-					break
-				else:
-					task.magazine.status = 'active'
+			sections = section.magazine.sections
+
+			for s in sections:
+				for task in s.tasks:
+					if task.status == 'road-blocked':
+						task.section.status = 'road-blocked'
+						task.section.magazine.status = 'road-blocked'
+						break
+					else:
+						task.section.status = 'active'
+						task.section.magazine.status = 'active'
+
 
 			db.session.commit()
 
@@ -228,7 +318,7 @@ def edit_task(id):
 
 		return render_template('form.html', form=form)
 
-	flash('That magazine does not exist.')
+	flash('That section does not exist.')
 	return redirect(url_for('all_magazines'))
 
 
@@ -266,11 +356,18 @@ def archive_client(id):
 
 		if magazines:
 			for magazine in magazines:
-				tasks = Task.query.filter_by(magazine=magazine)
+				sections = Section.query.filter_by(magazine=magazine)
 
-				if tasks:
-					for task in tasks:
-						db.session.delete(task)
+				if sections:
+					for section in sections:
+						tasks = Task.query.filter_by(section=section)
+
+						if tasks:
+							for task in tasks:
+								task.active = False
+								db.session.commit()
+
+						section.active = False
 						db.session.commit()
 
 				magazine.active = False
@@ -278,7 +375,7 @@ def archive_client(id):
 
 		client.active = False
 		db.session.commit()
-		flash('The client and any associated magazines have been archived. Any tasks have been deleted.')
+		flash('The client, any associated magazines, their sections and their tasks have been archived.')
 		return redirect(url_for('all_clients'))
 
 	flash('No such client exists.')
@@ -291,21 +388,47 @@ def archive_magazine(id):
 	magazine = Magazine.query.get(id)
 
 	if magazine:
-		tasks = Task.query.filter_by(magazine=magazine)
+		sections = Section.query.filter_by(magazine=magazine)
+		
+		if sections:
+			for section in sections:
+				tasks = Task.query.filter_by(section=section)
 
-		if tasks:
-			for task in tasks:
-				db.session.delete(task)
+				if tasks:
+					for task in tasks:
+						task.active = False
+						db.session.commit()
+
+				section.active = False
 				db.session.commit()
 
-		magazine.active = False
-		db.session.commit()
-		flash("The magazine have been archived. \
-					The associated tasks have been deleted.")
+		flash("The magazine, its associated sections and their tasks have been archived.")
 		return redirect(url_for('all_magazines'))
 
 	flash('No such magazine exists.')
 	return redirect(url_for('all_magazines'))
+
+
+@app.route('/archive/section/<int:id>')
+@login_required
+def archive_section():
+	section = Section.query.get(id)
+
+	if section:
+		tasks = Task.query.filter_by(section=section)
+
+		if tasks:
+			for task in tasks:
+				task.active = False
+				db.session.commit()
+
+		section.active = False
+		db.session.commit()
+		flash('The section and its associated tasks have been archived.')
+		return render_template('all_sections')
+
+	flash('No such section exists.')
+	return render_template('all_sections')
 
 
 @app.route('/delete/user/<int:id>')
@@ -420,6 +543,12 @@ def all_magazines():
 
 	return render_template('all_mags.html', magazines=magazines)
 
+@app.route('/sections')
+@login_required
+def all_sections():
+	sections = Section.query.filter_by(active=True).all()
+
+	return render_template('all_sections.html', sections=sections)
 
 @app.route('/tasks')
 @login_required
@@ -463,6 +592,17 @@ def magazine(id):
 		return redirect(url_for('all_magazines'))
 
 	return render_template('magazine.html', mag=mag)
+
+@app.route('/section/<int:id>')
+@login_required
+def section(id):
+	section = Section.query.get(id)
+
+	if not section:
+		flash('That section does not exist.')
+		return redirect(url_for('all_sections'))
+
+	return render_template('section.html', section=section)
 
 
 @app.route('/task/<int:id>')

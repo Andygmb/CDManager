@@ -6,8 +6,8 @@
 
   <h2 class="inline">{{ task.name }}
   <small><a href="{{ url_for('edit_task', id=task.id) }}"> (Edit Task)</a></small></h2>
-  <h4><a href="{{ url_for('client', id=task.magazine.owner.id) }}">{{ task.magazine.owner }}</a></h4>
-  <h4><a href="{{ url_for('magazine', id=task.magazine.id) }}">{{ task.magazine.name }}</a></h4>
+  <h4><a href="{{ url_for('client', id=task.section.magazine.owner.id) }}">{{ task.section.magazine.owner }}</a></h4>
+  <h4><a href="{{ url_for('magazine', id=task.section.magazine.id) }}">{{ task.section.magazine.name }}</a></h4>
 
 	
   <h4 class="main-info">Task Info</h4>

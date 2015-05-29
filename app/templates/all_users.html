@@ -10,6 +10,7 @@
 	        <tr>
 	        	<th>User</th>
 	        	<th>Magazine</th>
+	        	<th>Section</th>
 	        	<th>Assigned Tasks</th>
 	        	<th>Task Descriptions</th>
 	        </tr>
@@ -21,7 +22,9 @@
 		     	{% for task in user.tasks %}
 		     	<tr class="{{ task.status }}-mag">
 		     		<td></td>
-		     		<td><a href="{{ url_for('magazine', id=task.magazine.id) }}">{{ task.magazine.client_mag }}</a></td>
+		     		<td><a href="{{ url_for('magazine', id=task.section.id) }}">
+		     		{{ task.section.magazine.client_mag }}</a></td>
+		     		<td><a href="{{ url_for('section', id=task.section.id) }}">{{ task.section.name }}</a></td>
 					<td><a href="{{ url_for('task', id=task.id) }}">{{ task.name }}</a></td>	  
 	   				<td>{{ task.description }}</td>
      			</tr>

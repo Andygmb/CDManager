@@ -10,22 +10,24 @@
         <tr>
           <th>Company</th>
           <th>Project</th>
-          <th>Due Date</th>
-          <th>Name</th>
+          <th>Section</th>
+          <th>Task Name</th>
           <th>Description</th>
           <th>Additional Notes</th>
+          <th>Due Date</th>
           <th>Assigned To</th>
         </tr>
       </thead>
       <tbody>
       {% for task in tasks %}
         <tr class="{{ task.status }}-mag">
-          <td><a href="{{ url_for('client', id=task.magazine.owner.id) }}">{{ task.magazine.owner }}</a></td>
-          <td><a href="{{ url_for('magazine', id=task.magazine.id) }}">{{ task.magazine.name }}</a></td>
-          <td>{{ moment(task.due_date).format('MMMM Do YYYY') }}</td>
+          <td><a href="{{ url_for('client', id=task.section.magazine.owner.id) }}">{{ task.section.magazine.owner }}</a></td>
+          <td><a href="{{ url_for('magazine', id=task.section.magazine.id) }}">{{ task.section.magazine.name }}</a></td>
+          <td><a href="{{ url_for('section', id=task.section.id) }}">{{ task.section.name }}</a></td>
           <td><a href="{{ url_for('task', id=task.id) }}">{{ task.name }}</a></td>
           <td>{{ task.description }}</td>
           <td>{{ task.note }}</td>
+          <td>{{ moment(task.due_date).format('MMMM Do YYYY') }}</td>
           <td>{% if task.employee.id %}<a href="{{ url_for('user', id=task.employee.id) }}">{{ task.employee.name }}</a>{% endif %}</td>
         </tr>
       {% endfor %}
