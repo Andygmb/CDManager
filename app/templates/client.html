@@ -12,7 +12,7 @@
     <div class="col s12">
       <div class="card-panel black-text">
         <div class="card-title">
-          <a class="waves-effect waves-light btn right" href="{{ url_for('edit_client', id=client.id) }}">Edit Client</a>
+          <a class="waves-effect waves-light btn right" href="{{ url_for('main.edit_client', id=client.id) }}">Edit Client</a>
           <h4>{{ client.name }}</h4>
         </div>
           <p>Contact: <a href="mailto:{{ client.email }}">{{ client.contact }}</a></p>
@@ -29,7 +29,7 @@
       <div class="col s12">
         <div class="card-panel black-text">
           <div class="card-title" style="clear:both;">
-            <h4 class="grey-text text-darken-4"><a href="{{ url_for('magazine', id=mag.id) }}">{{ mag.name }}</a></h4>
+            <h4 class="grey-text text-darken-4"><a href="{{ url_for('main.magazine', id=mag.id) }}">{{ mag.name }}</a></h4>
           </div>
           <p>Sales Person: {{ mag.sales_person }}</p>
           <p>Pages: {{ mag.pages }}</p>

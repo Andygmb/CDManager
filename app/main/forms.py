@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, TextField, \
 SelectField, DateField, IntegerField, SubmitField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import InputRequired, Email, EqualTo, Optional
-from models import Client, User, Magazine, Section, Role
+from ..models import Client, User, Magazine, Section, Role
 
 
 def get_all_clients():

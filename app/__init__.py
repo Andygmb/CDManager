@@ -5,26 +5,27 @@ from flask.ext.login import LoginManager
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.moment import Moment
-import os
+from config import config
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-
-app = Flask(__name__)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = \
-os.environ.get('SQLALCHEMY_DATABASE_URI')
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-app.config['DEBUG'] = True
-
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-manager = Manager(app)
-Material(app)
-login_manager = LoginManager(app)
-moment = Moment(app)
+moment = Moment()
+db = SQLAlchemy()
+login_manager = LoginManager()
 
 login_manager.session_protection = 'strong'
-login_manager.login_view = 'login'
-manager.add_command('db', MigrateCommand)
+login_manager.login_view = 'main.login'
 
-from app import views, models
+
+def create_app(config_name):
+	app = Flask(__name__)
+	app.config.from_object(config[config_name])
+	config[config_name].init_app(app)
+
+	moment.init_app(app)
+	db.init_app(app)
+	login_manager.init_app(app)
+	Material(app)
+
+	from .main import main as main_blueprint
+	app.register_blueprint(main_blueprint)
+
+	return app

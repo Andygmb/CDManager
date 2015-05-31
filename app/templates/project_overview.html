@@ -13,8 +13,8 @@
       <tbody>
       {% for mag in magazines %}
         <tr>
-          <td><a href="{{ url_for('client', id=mag.owner.id) }}">{{ mag.owner.name }}</a></td>
-          <td><a href="{{ url_for('magazine', id=mag.id) }}">{{ mag.name }}</a></td>
+          <td><a href="{{ url_for('main.client', id=mag.owner.id) }}">{{ mag.owner.name }}</a></td>
+          <td><a href="{{ url_for('main.magazine', id=mag.id) }}">{{ mag.name }}</a></td>
         </tr>
       {% endfor %}
       </tbody>

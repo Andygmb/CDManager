@@ -14,8 +14,8 @@
         <div class="col s12">
           <div class="card-panel black-text">
             <div class="card-title">
-              <a href="{{ url_for('edit_section', id=section.id) }}" class="waves-effect waves-light btn right">Edit Section</a>
-              <h4><a href="{{ url_for('magazine', id=section.magazine.id) }}">{{section.magazine.owner.name}}</a> - <a href="{{ url_for('section', id=section.id) }}">{{ section.name }}</a></h4>
+              <a href="{{ url_for('main.edit_section', id=section.id) }}" class="waves-effect waves-light btn right">Edit Section</a>
+              <h4><a href="{{ url_for('main.magazine', id=section.magazine.id) }}">{{section.magazine.owner.name}}</a> - <a href="{{ url_for('main.section', id=section.id) }}">{{ section.name }}</a></h4>
             </div>
             <p>Description: {{ section.description }}</p>
             <p>Notes: {{ section.note }}</p>

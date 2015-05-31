@@ -8,9 +8,9 @@
 <div class="container">
 
   <div class="center-align">
-    <a href="{{ url_for('client', id=section.magazine.owner.id) }}" class="waves-effect waves-light btn">{{ section.magazine.owner.name }}</a> <a href="{{ url_for('edit_client', id=section.magazine.owner.id) }}" class="waves-effect waves-light btn">Edit Client</a>
-    <a href="{{ url_for('magazine', id=section.magazine.id) }}" class="waves-effect waves-light btn">{{ section.magazine.name }}</a>
-    <a href="{{ url_for('edit_magazine', id=section.magazine.id) }}" class="waves-effect waves-light btn">Edit Magazine</a>
+    <a href="{{ url_for('main.client', id=section.magazine.owner.id) }}" class="waves-effect waves-light btn">{{ section.magazine.owner.name }}</a> <a href="{{ url_for('main.edit_client', id=section.magazine.owner.id) }}" class="waves-effect waves-light btn">Edit Client</a>
+    <a href="{{ url_for('main.magazine', id=section.magazine.id) }}" class="waves-effect waves-light btn">{{ section.magazine.name }}</a>
+    <a href="{{ url_for('main.edit_magazine', id=section.magazine.id) }}" class="waves-effect waves-light btn">Edit Magazine</a>
   </div>
 
   <h4>Section</h4>
@@ -18,8 +18,8 @@
     <div class="col s12">
         <div class="card-panel black-text">
           <div class="card-title">
-            <a href="{{ url_for('edit_section', id=section.id) }}" class="waves-effect waves-light btn right">Edit Section</a>
-            <h4><a href="{{ url_for('section', id=section.id) }}">{{ section.name }}</a></h4>
+            <a href="{{ url_for('main.edit_section', id=section.id) }}" class="waves-effect waves-light btn right">Edit Section</a>
+            <h4><a href="{{ url_for('main.section', id=section.id) }}">{{ section.name }}</a></h4>
           </div>
           <p>Description: {{ section.description }}</p>
           <p>Notes: {{ section.note }}</p>
@@ -29,10 +29,10 @@
               <div class="col s12">
                 <div class="card-panel black-text {{ task.status }}">
                   <div class="card-title">
-                    <a href="{{ url_for('edit_task', id=task.id) }}" class="waves-effect waves-light btn right">Edit Task</a>
-                    <h5><a href="{{ url_for('task', id=task.id) }}"><a href="{{ url_for('task', id=task.id) }}">{{ task.name }}</a></h5>
+                    <a href="{{ url_for('main.edit_task', id=task.id) }}" class="waves-effect waves-light btn right">Edit Task</a>
+                    <h5><a href="{{ url_for('main.task', id=task.id) }}"><a href="{{ url_for('main.task', id=task.id) }}">{{ task.name }}</a></h5>
                   </div>
-                  <p>Assigned to: <a href="{{ url_for('user', id=task.employee.id) }}">{{ task.employee }}</a></p>
+                  <p>Assigned to: <a href="{{ url_for('main.user', id=task.employee.id) }}">{{ task.employee }}</a></p>
                   <p>Due Date: {{ moment(task.due_date).format('MMMM Do YYYY') }}</p>
                   <p>Description: {{ task.description }}</p>
                   <p>Notes: {{ task.note }}</p>
