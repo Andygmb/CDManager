@@ -12,8 +12,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = \
-os.environment.get('SQLALCHEMY_DATABASE_URI')
-app.config['SECRET_KEY'] = os.environment.get('SECRET_KEY')
+os.environ.get('SQLALCHEMY_DATABASE_URI')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['DEBUG'] = True
 
 db = SQLAlchemy(app)
