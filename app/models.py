@@ -62,7 +62,7 @@ class Client(db.Model):
 	owner_phone = db.Column(db.String(60))
 	contact = db.Column(db.String(60))
 	email = db.Column(db.String(60))
-	phone = db.Column(db.String(15))
+	phone = db.Column(db.String(25))
 	address = db.Column(db.String(100))
 	active = db.Column(db.Boolean, default=1)
 	note = db.Column(db.Text)
