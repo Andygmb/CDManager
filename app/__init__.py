@@ -1,5 +1,4 @@
 from flask import Flask
-#from flask_bootstrap import Bootstrap
 from flask_material import Material
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
@@ -12,8 +11,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] =\
- os.environment.get('SQLALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = \
+os.environment.get('SQLALCHEMY_DATABASE_URI')
 app.config['SECRET_KEY'] = os.environment.get('SECRET_KEY')
 app.config['DEBUG'] = True
 
