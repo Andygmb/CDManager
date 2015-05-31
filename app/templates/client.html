@@ -1,59 +1,46 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+
+{% block pagetitle %}
+    {{ client.name }}
+{% endblock %}
 
 {% block content %}
 <div class="container">
 
-  <h2 class="inline">{{ client.name }}
-  <small><a href="{{ url_for('edit_client',id=client.id) }}"> (Edit Client)</a></small></h2>
-  <h3>{% if mag %}<a href="{{ url_for('magazine', id=mag.id) }}">{{ mag.name }}</a>{% endif %}</h3>
+  <h4>Client Info</h4>
+  <div class="row">
+    <div class="col s12">
+      <div class="card-panel black-text">
+        <div class="card-title">
+          <a class="waves-effect waves-light btn right" href="{{ url_for('edit_client', id=client.id) }}">Edit Client</a>
+          <h4>{{ client.name }}</h4>
+        </div>
+          <p>Contact: <a href="mailto:{{ client.email }}">{{ client.contact }}</a></p>
+          <p>Address: {{ client.address }} </p>
+          <p>Phone: {{ client.phone }} </p>
+          <p>Notes: {{ client.note }}</p>
+      </div>
+    </div>
+  </div>
 
-  <h4 class="main-info">Client Info</h4>
-	<table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Contact</th>
-          <th>Email</th>
-          <th>Address</th>
-          <th>Phone</th>
-          <th>Active</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{ client.contact }}</td>
-          <td><a href="mailto:{{ client.email }}">{{ client.email }}</a></td>
-          <td>{{ client.address }}</td>
-          <td>{{ client.phone }}</td>
-          <td>{% if client.active == '1' %}Yes{% else %}No{% endif %}</td>
-        </tr>
-      </tbody>
-  </table>
+  <h4>Magazines</h4>
+  {% for mag in client.magazines %}
+    <div class="row">
+      <div class="col s12">
+        <div class="card-panel black-text">
+          <div class="card-title" style="clear:both;">
+            <h4 class="grey-text text-darken-4"><a href="{{ url_for('magazine', id=mag.id) }}">{{ mag.name }}</a></h4>
+          </div>
+          <p>Sales Person: {{ mag.sales_person }}</p>
+          <p>Pages: {{ mag.pages }}</p>
+          <p>Contact: <a href="mailto:{{ mag.owner.email }}">{{ mag.owner.contact }}</a></p>
+          <p>Notes: {{ mag.note }}</p>
+          <p>Published: {% if mag.published %}{{ mag.published }}{% endif %}</p>
+        </div>
+      </div>
+    </div>
 
-  <h4 class="main-info">Client Notes</h4>
-  {{ client.note }}
-
-  <h4 class="main-info">Magazines</h4>
-    <table class="table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Sales Person</th>
-            <th>Pages</th>
-            <th>Published</th>
-          </tr>
-        </thead>
-        <tbody>
-        {% for mag in client.magazines %}
-          <tr class="{{ mag.status }}-mag">
-            <td><a href="{{ url_for('magazine', id=mag.id) }}">{{ mag.name }}</a></td>
-            <td>{{ mag.sales_person }}</td>
-            <td>{{ mag.pages }}</td>
-            <td>{% if mag.published %}{{ mag.published }}{% endif %}</td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+  {% endfor %}
 
 	
 </div>

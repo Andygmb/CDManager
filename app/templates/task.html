@@ -1,35 +1,30 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+
+  {% block pagetitle %}
+    {{ task.name }}
+  {% endblock %}
 
 {% block content %}
 <div class="container">
 
-  <h2 class="inline">{{ task.name }}
-  <small><a href="{{ url_for('edit_task', id=task.id) }}"> (Edit Task)</a></small></h2>
-  <h4><a href="{{ url_for('client', id=task.section.magazine.owner.id) }}">{{ task.section.magazine.owner }}</a></h4>
-  <h4><a href="{{ url_for('magazine', id=task.section.magazine.id) }}">{{ task.section.magazine.name }}</a></h4>
+  <div class="center-align">
+    <a href="{{ url_for('client', id=task.section.magazine.owner.id) }}" class="waves-effect waves-light btn">{{ task.section.magazine.owner.name }}</a> <a href="{{ url_for('edit_client', id=task.section.magazine.owner.id) }}" class="waves-effect waves-light btn">Edit Client</a>
+    <a href="{{ url_for('magazine', id=task.section.magazine.id) }}" class="waves-effect waves-light btn">{{ task.section.magazine.name }}</a>
+    <a href="{{ url_for('edit_magazine', id=task.section.magazine.id) }}" class="waves-effect waves-light btn">Edit Magazine</a>
+  </div>
 
-	
-  <h4 class="main-info">Task Info</h4>
-  <table class="table">
-      <thead>
-        <tr>
-          <th>Description</th>
-          <th>Due Date</th>
-          <th>Assigned To</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="{{ task.status }}-mag">
-          <td>{{ task.description }}</td>
-          <td>{{ moment(task.due_date).format('MMMM Do YYYY') }}</td>
-          <td>{% if task.employee %}<a href="{{ url_for('user', id=task.employee.id) }}">{{ task.employee.name }}</a>{% endif %}</td>
-        </tr>
-      </tbody>
-    </table>
 
-    <h4 class="main-info">Task Notes</h4>
-    {{ task.note }}
+  <div class="col s12">
+      <div class="card-panel black-text {{ task.status }}">
+        <div class="card-title">
+          <a href="{{ url_for('edit_task', id=task.id) }}" class="waves-effect waves-light btn right">Edit Task</a>
+        </div>
+        <p>Assigned to: {% if task.employee %}<a href="{{ url_for('user', id=task.employee.id) }}">{{ task.employee.name }}</a>{% endif %}</p>
+        <p>Due Date: {{ moment(task.due_date).format('MMMM Do YYYY') }}</p>
+        <p>Description: {{ task.description }}</p>
+        <p>Notes: {{ task.note }}</p>
+      </div>
+    </div>
 	
 </div>
 {% endblock %}

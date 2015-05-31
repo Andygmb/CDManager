@@ -1,25 +1,59 @@
-.active-mag a, .road-blocked-mag a {
-	text-decoration: underline;
-	font-weight: bold;
+nav {
+	background-color: #ef6c00;
 }
 
-.active-mag {
-	background-color: rgb(180, 233, 187);
+input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+	border-bottom: 1px solid #000;
+     box-shadow: 0 1px 0 0 #000;
 }
 
-.active-mag td, .active-mag a {
-	color: rgb(32, 88, 41);
+.dropdown-content li > a, .dropdown-content li > span {
+      color: #000;
 }
 
-.active-mag a:hover {
-	color: rgb(16, 45, 21)
+.btn, .btn-default {
+	background-color: #EF6C00;
 }
 
-.road-blocked-mag {
+.control-label {
+	font-size: 1em;
+}
+
+main {
+	margin-top: 20px;
+}
+
+.right-border {
+	padding-right: 16px;
+	margin-right: 16px;
+	border-right: 1px solid #000;
+}
+
+.clearfix:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+     }
+.clearfix { display: inline-block; }
+/* start commented backslash hack \*/
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+/* close commented backslash hack */
+
+
+
+
+
+
+
+.road-blocked {
 	background-color: rgb(255, 190, 188);
 }
 
-.road-blocked-mag td, .road-blocked-mag a {
+.road-blocked td, .road-blocked a {
 	color: rgb(114, 46, 45);
 }
 

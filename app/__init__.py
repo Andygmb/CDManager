@@ -1,5 +1,6 @@
 from flask import Flask
-from flask_bootstrap import Bootstrap
+#from flask_bootstrap import Bootstrap
+from flask_material import Material
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask.ext.script import Manager
@@ -12,14 +13,14 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] =\
- 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
-app.config['SECRET_KEY'] = 'something super secret!'
+ os.environment.get('SQLALCHEMY_DATABASE_URI')
+app.config['SECRET_KEY'] = os.environment.get('SECRET_KEY')
 app.config['DEBUG'] = True
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 manager = Manager(app)
-bootstrap = Bootstrap(app)
+Material(app)
 login_manager = LoginManager(app)
 moment = Moment(app)
 

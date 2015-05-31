@@ -80,7 +80,7 @@ class EditTask(Form):
 	employee = QuerySelectField('Assign To', query_factory=get_all_designers, get_label='name', 
 		validators=[InputRequired()])
 	name = StringField('Task Name', validators=[InputRequired()])
-	description = TextField('Description', validators=[InputRequired()])
+	description = TextField('Description')
 	due_date = DateField(format='%m/%d/%Y')
 	note = TextField('Notes')
 	submit = SubmitField()

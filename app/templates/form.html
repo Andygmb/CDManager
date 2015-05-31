@@ -1,10 +1,22 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+{% import "material/wtf.html" as wtf %}
 
 {% block content %}
 <div class="container">
 
-	{{ wtf.quick_form(form) }}
+	{{ wtf.quick_form(form, action="") }}
 
 </div>
+
+<script>
+$('.datepicker').pickadate({
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 15 // Creates a dropdown of 15 years to control year
+  });
+
+$(document).ready(function() {
+    $('select').material_select();
+  });
+</script>
+
 {% endblock %}

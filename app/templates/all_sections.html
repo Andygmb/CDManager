@@ -1,31 +1,30 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+
+{% block pagetitle %}
+  All Sections
+{% endblock %}
 
 {% block content %}
-<div class="container">
 
+  <div class="container">
+    <div class="row">
 
-	<table class="table">
-      <thead>
-        <tr>
-          <th>Company</th>
-          <th>Project</th>
-          <th>Name</th>
-          <th>Additional Notes</th>
-        </tr>
-      </thead>
-      <tbody>
       {% for section in sections %}
-        <tr class="{{ section.status }}-mag">
-          <td><a href="{{ url_for('client', id=section.owner.id) }}">{{ section.owner }}</a></td>
-          <td><a href="{{ url_for('magazine', id=section.magazine.id) }}">{{ section.magazine.name }}</a></td>
-          <td><a href="{{ url_for('section', id=section.id) }}">{{ section.name }}</a></td>
-          <td>{{ section.note }}</td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
 
-	
-</div>
+        <div class="col s12">
+          <div class="card-panel black-text">
+            <div class="card-title">
+              <a href="{{ url_for('edit_section', id=section.id) }}" class="waves-effect waves-light btn right">Edit Section</a>
+              <h4><a href="{{ url_for('magazine', id=section.magazine.id) }}">{{section.magazine.owner.name}}</a> - <a href="{{ url_for('section', id=section.id) }}">{{ section.name }}</a></h4>
+            </div>
+            <p>Description: {{ section.description }}</p>
+            <p>Notes: {{ section.note }}</p>
+          </div>
+        </div>
+
+      {% endfor %}
+      
+    </div>
+  </div>
+
 {% endblock %}

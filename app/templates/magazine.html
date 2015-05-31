@@ -1,82 +1,61 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+
+{% block pagetitle %}
+  {{ mag.name }}
+{% endblock %}
 
 {% block content %}
 <div class="container">
 
-  <h2 class="inline">{{ mag.name }} 
-  <small><a href="{{ url_for('edit_magazine', id=mag.id) }}"> (Edit Magazine)</a></small></h2>
-  <h3><a href="{{ url_for('client', id=mag.owner.id) }}">{{ mag.owner }}</a></h3>
+  <div class="center-align">
+    <a href="{{ url_for('client', id=mag.owner.id) }}" class="waves-effect waves-light btn">{{ mag.owner.name }}</a> <a href="{{ url_for('edit_client', id=mag.owner.id) }}" class="waves-effect waves-light btn">Edit Client</a>
+  </div>
 
-
-  <h4 class="main-info">Magazine Info</h4>
-  <table class="table">
-      <thead>
-        <tr>
-          <th>Contact</th>
-          <th>Email</th>
-          <th>Address</th>
-          <th>Phone</th>
-          <th>Pages</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{ mag.owner.contact }}</td>
-          <td><a href="mailto: {{ mag.owner.email }}">{{ mag.owner.email }}</a></td>
-          <td>{{ mag.owner.address }}</td>
-          <td>{{ mag.owner.phone }}</td>
-          <td>{{ mag.pages }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    {% if mag.note %}
-      <h2>Notes</h2>
-      {{ mag.note }}
-    {% endif %}
+  <div class="col s12">
+    <div class="card-panel black-text">
+      <div class="card-title" style="clear:both;">
+        <a href="{{ url_for('edit_magazine', id=mag.id) }}" class="waves-effect waves-light btn right">Edit Magazine</a>
+        <h4 class="grey-text text-darken-4">{{ mag.name }}</h4>
+      </div>
+      <p>Client: <a href="{{ url_for('client', id=mag.owner.id) }}">{{ mag.owner }}</a></p>
+      <p>Contact: <a href="mailto:{{ mag.owner.email }}">{{ mag.owner.contact }}</a></p>
+      <p>Address: {{ mag.owner.address }}</p>
+      <p>Phone: {{ mag.owner.phone }}</p>
+      <p>Pages: {{ mag.pages }}</p>
+      <p>Notes: {{ mag.note }}</p>
+    </div>
+  </div>
 
   <h4 class="main-info">Sections</h4>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Additional Notes</th>
-      </tr>
-    </thead>
-    <tbody>
     {% for section in mag.sections %}
-      <tr class="{{ section.status }}-mag">
-        <td><a href="{{ url_for('section', id=section.id) }}">{{ section.name }}</a></td>
-        <td>{{ section.description }}</td>
-        <td>{{ section.note }}</td>
-      </tr>
+      <div class="col s12">
+          <div class="card-panel black-text">
+            <div class="card-title">
+              <a href="{{ url_for('edit_section', id=section.id) }}" class="waves-effect waves-light btn right">Edit Section</a>
+              <h4><a href="{{ url_for('section', id=section.id) }}">{{ section.name }}</a></h4>
+            </div>
+            <p>Description: {{ section.description }}</p>
+            <p>Notes: {{ section.note }}</p>
+            <h4>Tasks</h4>
+            {% for task in section.tasks %}
+              <div class="row">
+                <div class="col s12">
+                  <div class="card-panel black-text {{ task.status }}">
+                    <div class="card-title">
+                      <a href="{{ url_for('edit_task', id=task.id) }}" class="waves-effect waves-light btn right">Edit Task</a>
+                      <h5><a href="{{ url_for('task', id=task.id) }}"><a href="{{ url_for('task', id=task.id) }}">{{ task.name }}</a></h5>
+                    </div>
+                    <p>Assigned to: <a href="{{ url_for('user', id=task.employee.id) }}">{{ task.employee }}</a></p>
+                    <p>Due Date: {{ moment(task.due_date).format('MMMM Do YYYY') }}</p>
+                    <p>Description: {{ task.description }}</p>
+                    <p>Notes: {{ task.note }}</p>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
     {% endfor %}
-    </tbody>
-  </table>
-
-  <h4 class="main-info">Tasks</h4>
-  <table class="table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Due Date</th>
-          <th>Assigned To</th>
-        </tr>
-      </thead>
-      <tbody>
-      {% for task in mag.tasks %}
-        <tr class="{{ task.status }}-mag">
-          <td><a href="{{ url_for('task', id=task.id) }}">{{ task.name }}</a></td>
-          <td>{{ task.description }}</td>
-          <td>{{ moment(task.due_date).format('MMMM Do YYYY') }}</td>
-          <td><a href="{{ url_for('user', id=task.employee.id) }}">{{ task.employee.name }}</a></td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
   
 </div>
 {% endblock %}

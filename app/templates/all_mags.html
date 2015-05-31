@@ -1,31 +1,31 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+
+{% block pagetitle %}
+  All Magazines
+{% endblock %}
 
 {% block content %}
-<div class="container">
 
-	<table class="table">
-      <thead>
-        <tr>
-          <th>Company</th>
-          <th>Magazine Name</th>
-          <th>Pages</th>
-          <th>Contact</th>
-          <th>Notes</th>
-        </tr>
-      </thead>
-      <tbody>
+  <div class="container">
+    <div class="row">
+
       {% for mag in magazines %}
-        <tr class="{{ mag.status }}-mag">
-          <td><a href="{{ url_for('client', id=mag.owner.id) }}">{{ mag.owner.name }}</a></td>
-          <td><a href="{{ url_for('magazine', id=mag.id) }}">{{ mag.name }}</a></td>
-          <td>{{ mag.pages }}</td>
-          <td><a href="mailto:{{ mag.owner.email }}">{{ mag.owner.contact }}</a></td>
-          <td>{{ mag.note }}</td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
 
-</div>
+        <div class="col s12">
+          <div class="card-panel black-text">
+            <div class="card-title" style="clear:both;">
+              <a href="{{ url_for('edit_magazine', id=mag.id) }}" class="waves-effect waves-light btn right">Edit Magazine</a>
+              <h4 class="grey-text text-darken-4"><a href="{{ url_for('client', id=mag.owner.id) }}">{{ mag.owner.name }}</a> - <a href="{{ url_for('magazine', id=mag.id) }}">{{ mag.name }}</a></h4>
+            </div>
+            <p class="black-text">Pages: {{ mag.pages }}</p>
+            <p class="black-text">Contact: <a href="mailto:{{ mag.owner.email }}">{{ mag.owner.contact }}</a></p>
+            <p class="black-text">Notes: {{ mag.note }}</p>
+          </div>
+        </div>
+
+      {% endfor %}
+      
+    </div>
+  </div>
+
 {% endblock %}
