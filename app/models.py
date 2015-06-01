@@ -124,7 +124,7 @@ class Task(db.Model):
 	active = db.Column(db.Boolean, default=1)
 	section_id = db.Column(db.Integer, db.ForeignKey('sections.id'))
 	assigned_to = db.Column(db.Integer, db.ForeignKey('users.id'))
-	assigned_by = db.column(db.Integer, db.ForeignKey('users.id'))
+	assigned_by = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 	def __repr__(self):
 		return '{}'.format(self.name)
