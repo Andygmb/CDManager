@@ -20,8 +20,8 @@ class User(UserMixin, db.Model):
 	last_name = db.Column(db.String(25))
 	name = db.Column(db.String(50))
 	active = db.Column(db.Boolean, default=1)
-	tasks = db.relationship('Task', backref='employee', lazy='dynamic')
-	assignments = db.relationship('Task', backref='assigner', lazy='dynamic')
+	tasks = db.relationship('Task', backref='employee', lazy='dynamic', foreign_keys='Task.assigned_to')
+	assignments = db.relationship('Task', backref='assigner', lazy='dynamic', foreign_keys='Task.assigned_by')
 	role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 	magazines = db.relationship('Magazine', backref='sales_person', lazy='dynamic')
 
