@@ -1,5 +1,36 @@
 {% extends "base.html" %}
 
+{% block pagetitle %}
+  All Clients
+{% endblock %}
+
+{% block content %}
+
+  <div class="container">
+    <div class="row">
+
+      {% for user in users %}
+
+        <div class="col s12">
+          <div class="card-panel black-text">
+            <div class="card-title">
+              <a class="waves-effect waves-light btn right" href="{{ url_for('main.edit_user', id=user.id) }}">Edit User</a>
+              <h4><a href="{{ url_for('main.user', id=user.id) }}">{{ user.name }}</a></h4>
+            </div>
+              <p>Contact: <a href="mailto:"></a></p>
+              <p>Address:  </p>
+              <p>Phone:  </p>
+              <p>Notes: </p>
+          </div>
+        </div>
+
+      {% endfor %}
+      
+    </div>
+  </div>
+
+{% endblock %}
+
 {% block content %}
 <div class="container">
 

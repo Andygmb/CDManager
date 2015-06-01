@@ -531,7 +531,7 @@ def all_users():
 @login_required
 def all_clients():
 
-	clients = Client.query.filter_by(active=True).order_by('name asc').all()
+	clients = Client.query.filter_by(active=True).order_by(Client.name.asc()).all()
 
 	return render_template('all_clients.html', clients=clients)
 
@@ -540,7 +540,7 @@ def all_clients():
 @main.route('/magazines')
 @login_required
 def all_magazines():
-	magazines = Magazine.query.filter_by(active=True).order_by('client_mag asc').all()		
+	magazines = Magazine.query.filter_by(active=True).order_by(Magazine.client_mag.asc()).all()		
 
 	return render_template('all_mags.html', magazines=magazines)
 

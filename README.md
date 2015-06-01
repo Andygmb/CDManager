@@ -15,7 +15,7 @@ This project is free to use for any purposes under the Apache license. Attributi
 * Flask-Login
 * Flask-WTF
 * Flask-Mail
-* Flask-Bootstrap
+* Flask-Material
 * Flask-Moment
 
 # Features
