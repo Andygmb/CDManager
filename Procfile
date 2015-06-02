@@ -1,1 +1,1 @@
-web: gunicorn cdm:app
+web: gunicorn manage:app
