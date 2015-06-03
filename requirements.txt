@@ -16,3 +16,5 @@ Werkzeug==0.10.4
 alembic==0.7.6
 itsdangerous==0.24
 wsgiref==0.1.2
+gunicorn==19.1.1
+psycopg2==2.5.4
