@@ -83,8 +83,10 @@
 	              <div class="collapsible-body">
 	                <ul>
 	                  <li><a href="{{ url_for('main.all_users') }}">All Users</a></li>
+	                  {% if current_user.is_authenticated() %}
 	                  {% if current_user.role.name == 'Admin' %}
 	                  <li><a href="{{ url_for('main.add_user') }}">Add User</a></li>
+	                  {% endif %}
 	                  {% endif %}
 	                </ul>
 	              </div>
