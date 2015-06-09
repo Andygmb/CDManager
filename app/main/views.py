@@ -106,7 +106,7 @@ def add_magazine():
 						owner=form.owner.data, 
 						sales_person=form.sales_person.data, 
 						pages=form.pages.data, 
-						client_mag=str(form.owner.data) + ' - ' + str(form.name.data), 
+						client_mag='{} - {}'.format(form.owner.data, form.name.data), 
 						note=form.note.data)
 
 		db.session.add(mag)
@@ -125,7 +125,7 @@ def add_section():
 		section = Section(magazine=form.magazine.data,
 							owner=form.client.data,
 							name=form.name.data,
-							mag_section=str(form.magazine.data) + ' - ' + str(form.name.data),
+							mag_section='{} - {}'.format(form.magazine.data, form.name.data),
 							description=form.description.data,
 							note=form.note.data
 							)
@@ -266,6 +266,7 @@ def edit_section(id):
 			section.magazine = form.magazine.data
 			section.client = form.client.data
 			section.name = form.name.data
+			section.mag_section = '{} - {}'.format(form.magazine.data, form.name.data)
 			section.note = form.note.data
 
 			db.session.commit()
