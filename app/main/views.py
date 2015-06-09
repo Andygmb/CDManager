@@ -125,6 +125,7 @@ def add_section():
 		section = Section(magazine=form.magazine.data,
 							owner=form.client.data,
 							name=form.name.data,
+							mag_section=str(form.magazine.data) + ' - ' + str(form.name.data),
 							description=form.description.data,
 							note=form.note.data
 							)
