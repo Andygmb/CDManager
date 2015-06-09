@@ -79,9 +79,19 @@
 	                </ul>
 	              </div>
 	            </li>
+	            {% if current_user.role.name == 'Admin' %}
+	            <li class="bold"><a class="collapsible-header  waves-effect waves-orange">Tasks</a>
+	              <div class="collapsible-body">
+	                <ul>
+	                  <li><a href="{{ url_for('main.all_tasks') }}">All Tasks</a></li>
+	                  <li><a href="{{ url_for('main.add_task') }}">Add Task</a></li>
+	                </ul>
+	              </div>
+	            </li>
+	            {% endif %}
 	          </ul>
 	        </li>
-	        <li class="bold"><a href="http://materializecss.com/mobile.html" class="waves-effect waves-orange">Sign Out</a></li>
+	        <li class="bold"><a href="{{ url_for ('main.logout') }}" class="waves-effect waves-orange">Sign Out</a></li>
 	      </ul>
 		</header>
 	{% endblock %}
