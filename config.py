@@ -5,6 +5,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
 	SECRET_KEY = os.environ.get('SECRET_KEY') or 'Some secret key'
 	SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+	SQLALCHEMY_POOL_RECYCLE = 300
 
 	@staticmethod
 	def init_app(app):
