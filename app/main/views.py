@@ -1,9 +1,9 @@
 from flask import render_template, flash, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required
 from .. import db
-from ..models import User, Client, Magazine, Section, Task
+from ..models import User, Client, Magazine, Page, Task
 from . import main
-from .forms import EditUser, EditClient, EditMag, EditMag, EditSection, EditTask, LogIn
+from .forms import EditUser, EditClient, EditMag, EditMag, EditTask, LogIn
 from datetime import datetime
 
 
@@ -111,29 +111,19 @@ def add_magazine():
 
 		db.session.add(mag)
 		db.session.commit()
+
+		id = mag.id
+
+		count = 1
+
+		while count < form.pages.data + 1:
+			page = Page(number=count, magazine_id=id)
+			db.session.add(page)
+			db.session.commit()
+			count += 1
+
 		flash('Magazine successfully added.')
 		return redirect(url_for('.all_magazines'))
-
-	return render_template('form.html', form=form)
-
-@main.route('/add/section', methods=['GET', 'POST'])
-@login_required
-def add_section():
-	form = EditSection()
-
-	if form.validate_on_submit():
-		section = Section(magazine=form.magazine.data,
-							owner=form.client.data,
-							name=form.name.data,
-							mag_section='{} - {}'.format(form.magazine.data, form.name.data),
-							description=form.description.data,
-							note=form.note.data
-							)
-
-		db.session.add(section)
-		db.session.commit()
-		flash('Section successfully added.')
-		return redirect(url_for('.all_sections'))
 
 	return render_template('form.html', form=form)
 
@@ -149,7 +139,6 @@ def add_task():
 					description=form.description.data,
 					create_date=datetime.utcnow(),
 					status=form.status.data,
-					section=form.section.data,
 					note=form.note.data,
 					employee=form.employee.data)
 

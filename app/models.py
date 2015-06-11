@@ -47,7 +47,7 @@ class Role(db.Model):
 
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(20))
-	permissions = db.Column(db.Integer, default=True)
+	permissions = db.Column(db.Integer, default=2)
 	users = db.relationship('User', backref='role', lazy='dynamic')
 
 
@@ -67,7 +67,7 @@ class Client(db.Model):
 	active = db.Column(db.Boolean, default=True)
 	note = db.Column(db.Text)
 	magazines = db.relationship('Magazine', backref='owner', lazy='dynamic')
-	sections = db.relationship('Section', backref='owner', lazy='dynamic')
+
 
 	def __repr__(self):
 		return '{}'.format(self.name)
@@ -87,31 +87,32 @@ class Magazine(db.Model):
 	status = db.Column(db.String(40), default='active')
 	client_id = db.Column(db.Integer, db.ForeignKey('clients.id'))
 	sales_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-	sections = db.relationship('Section', backref='magazine', lazy='dynamic')
 	
 
 	def __repr__(self):
 		return '{}'.format(self.name)
 
 
-class Section(db.Model):
 
-	__tablename__ = 'sections'
+pages_tasks = db.Table('pages_tasks', 
+	db.Column('page_id', db.Integer, db.ForeignKey('pages.id')),
+	db.Column('task_id', db.Integer, db.ForeignKey('tasks.id'))
+	)
+
+
+class Page(db.Model):
+
+	__tablename__ = 'pages'
 
 	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(120))
-	mag_section = db.Column(db.String(120))
-	description = db.Column(db.Text)
-	status = db.Column(db.String(40), default='active')
-	active = db.Column(db.Boolean, default=True)
-	note = db.Column(db.Text)
+	number = db.Column(db.String(120))
 	magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
-	client_id = db.Column(db.Integer, db.ForeignKey('clients.id'))
-	tasks = db.relationship('Task', backref='section', lazy='dynamic')
+	tasks = db.relationship('Task', secondary=pages_tasks, 
+		backref=db.backref('pages', lazy='dynamic'), lazy='dynamic')
 
 
 class Task(db.Model):
-	
+
 	__tablename__ = 'tasks'
 
 	id = db.Column(db.Integer, primary_key=True)
@@ -122,9 +123,10 @@ class Task(db.Model):
 	status = db.Column(db.String(50))
 	note = db.Column(db.Text)
 	active = db.Column(db.Boolean, default=True)
-	section_id = db.Column(db.Integer, db.ForeignKey('sections.id'))
+	magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
 	assigned_to = db.Column(db.Integer, db.ForeignKey('users.id'))
 	assigned_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+
 
 	def __repr__(self):
 		return '{}'.format(self.name)

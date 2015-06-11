@@ -2,8 +2,8 @@ from flask_wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, TextField, \
 SelectField, DateField, IntegerField, SubmitField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from wtforms.validators import InputRequired, Email, EqualTo, Optional
-from ..models import Client, User, Magazine, Section, Role
+from wtforms.validators import InputRequired, Email, EqualTo, NumberRange, Optional
+from ..models import Client, User, Magazine, Page, Role
 
 
 def get_all_clients():
@@ -12,8 +12,8 @@ def get_all_clients():
 def get_all_magazines():
 	return Magazine.query.filter_by(active=True).filter_by(published=None).all()
 
-def get_all_sections():
-	return Section.query.filter_by(active=True).all()
+def get_all_pages():
+	return Page.query.filter_by().all()
 
 def get_all_users():
 	return User.query.all()
@@ -39,6 +39,7 @@ class EditUser(Form):
 		validators=[InputRequired()])
 	submit = SubmitField()
 
+
 class EditClient(Form):
 	name = StringField('Company Name', validators=[InputRequired()])
 	owner = StringField('Owner', validators=[InputRequired()])
@@ -51,6 +52,7 @@ class EditClient(Form):
 	note = TextField('Notes')
 	submit = SubmitField()
 
+
 class EditMag(Form):
 	owner = QuerySelectField('Client', query_factory=get_all_clients, get_label='name', 
 		validators=[InputRequired()])
@@ -62,28 +64,19 @@ class EditMag(Form):
 	note = TextField('Notes')
 	submit = SubmitField()
 
-class EditSection(Form):
-	magazine = QuerySelectField('Magazine', query_factory=get_all_magazines, get_label='client_mag', 
-		validators=[InputRequired()])
-	client = QuerySelectField('Client', query_factory=get_all_clients, get_label='name', 
-		validators=[InputRequired()])
-	name = StringField('Section Name', validators=[InputRequired()])
-	description = StringField('Section Description')
-	note = TextField('Notes')
-	submit = SubmitField()
 
 class EditTask(Form):
-	section = QuerySelectField('Section', query_factory=get_all_sections, get_label='mag_section', 
-		validators=[InputRequired()])
-	status = SelectField('Status', choices=[('active', 'Active'), ('road-blocked', 'Road Blocked'), \
-		('finished', 'Finished'), ('inactive', 'Inactive')], validators=[InputRequired()])
 	employee = QuerySelectField('Assign To', query_factory=get_all_designers, get_label='name', 
 		validators=[InputRequired()])
 	name = StringField('Task Name', validators=[InputRequired()])
 	description = TextField('Description')
 	due_date = DateField(format='%m/%d/%Y')
+	page = StringField('Page Number', validators=[InputRequired(), NumberRange(min=1,max=64, message='You entered an invalid page number.')])
+	status = SelectField('Status', choices=[('active', 'Active'), ('road-blocked', 'Road Blocked'), \
+		('finished', 'Finished'), ('inactive', 'Inactive')], validators=[InputRequired()])
 	note = TextField('Notes')
 	submit = SubmitField()
+
 
 class LogIn(Form):
 	email = StringField('Email', validators=[InputRequired(), Email()])
