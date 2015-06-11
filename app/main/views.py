@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, session, url_for, request
+from flask import render_template, flash, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required
 from .. import db
 from ..models import User, Client, Magazine, Section, Task
@@ -17,7 +17,7 @@ def login():
 		if user is not None and user.verify_password(form.password.data):
 			login_user(user, form.remember_me.data)
 			return redirect(url_for('.all_magazines'))
-			
+
 		flash('Either your username or password are incorrect.')
 	return render_template('form.html', form=form)
 
@@ -27,7 +27,7 @@ def login():
 def logout():
 	logout_user()
 	flash('You have been logged out.')
-	return redirect(url_for('.index'))	
+	return redirect(url_for('.login'))
 
 
 @main.route('/add/user', methods=['GET', 'POST'])
@@ -39,11 +39,11 @@ def add_user():
 		user = User.query.filter_by(email=form.email.data).first()
 
 		if user is None:
-			user = User(email=form.email.data, 
-						password=form.password.data, 
-						first_name=form.first_name.data, 
-						last_name=form.last_name.data, 
-						role=form.role.data, 
+			user = User(email=form.email.data,
+						password=form.password.data,
+						first_name=form.first_name.data,
+						last_name=form.last_name.data,
+						role=form.role.data,
 						name='{} {}'.format(form.first_name.data, form.last_name.data))
 
 			db.session.add(user)
@@ -67,11 +67,11 @@ def add_client():
 		client = Client.query.filter_by(name=form.name.data).first()
 
 		if client is None:
-			client = Client(name=form.name.data, 
-							owner=form.owner.data, 
-							owner_email=form.owner_email.data, 
+			client = Client(name=form.name.data,
+							owner=form.owner.data,
+							owner_email=form.owner_email.data,
 							owner_phone=form.owner_phone.data,
-							address=form.address.data, 
+							address=form.address.data,
 							note=form.note.data)
 
 			if not client.contact:
@@ -102,11 +102,11 @@ def add_magazine():
 	form = EditMag()
 
 	if form.validate_on_submit():
-		mag = Magazine(name=form.name.data, 
-						owner=form.owner.data, 
-						sales_person=form.sales_person.data, 
-						pages=form.pages.data, 
-						client_mag='{} - {}'.format(form.owner.data, form.name.data), 
+		mag = Magazine(name=form.name.data,
+						owner=form.owner.data,
+						sales_person=form.sales_person.data,
+						pages=form.pages.data,
+						client_mag='{} - {}'.format(form.owner.data, form.name.data),
 						note=form.note.data)
 
 		db.session.add(mag)
@@ -145,12 +145,12 @@ def add_task():
 
 	if form.validate_on_submit():
 
-		task = Task(name=form.name.data, 
-					description=form.description.data, 
-					create_date=datetime.utcnow(), 
-					status=form.status.data, 
-					section=form.section.data, 
-					note=form.note.data, 
+		task = Task(name=form.name.data,
+					description=form.description.data,
+					create_date=datetime.utcnow(),
+					status=form.status.data,
+					section=form.section.data,
+					note=form.note.data,
 					employee=form.employee.data)
 
 		db.session.add(task)
@@ -176,7 +176,7 @@ def edit_user(id):
 			user.name='{} {}'.format(form.first_name.data, form.last_name.data)
 
 			if form.password.data and form.confirm.data:
-				user.password = password=form.password.data				
+				user.password = password=form.password.data
 
 			db.session.commit()
 			flash('User succesfully edited.')
@@ -213,7 +213,7 @@ def edit_client(id):
 				client.contact = form.contact.data
 				client.email = form.email.data
 				client.phone = form.phone.data
-			
+
 			db.session.commit()
 			flash('Client successfully edited.')
 			return redirect(url_for('.client', id=id))
@@ -392,7 +392,7 @@ def archive_magazine(id):
 
 	if magazine:
 		sections = Section.query.filter_by(magazine=magazine)
-		
+
 		if sections:
 			for section in sections:
 				tasks = Task.query.filter_by(section=section)
@@ -468,7 +468,7 @@ def delete_client(id):
 		if magazines:
 			for magazine in magazines:
 				tasks = Task.query.filter_by(magazine=magazine).all()
-				
+
 				if tasks:
 					for task in tasks:
 						db.session.delete(task)
@@ -476,7 +476,7 @@ def delete_client(id):
 
 				db.session.delete(magazine)
 				db.session.commit()
-		
+
 		db.session.delete(client)
 		db.session.commit()
 		flash('The client, associated magazines and tasks have been deleted.')
@@ -493,7 +493,7 @@ def delete_magazine(id):
 
 	if magazine:
 		tasks = Task.query.filter_by(magazine=magazine).all()
-				
+
 		if tasks:
 			for task in tasks:
 				db.session.delete(task)
@@ -542,7 +542,7 @@ def all_clients():
 @main.route('/magazines')
 @login_required
 def all_magazines():
-	magazines = Magazine.query.filter_by(active=True).order_by(Magazine.client_mag.asc()).all()		
+	magazines = Magazine.query.filter_by(active=True).order_by(Magazine.client_mag.asc()).all()
 
 	return render_template('all_mags.html', magazines=magazines)
 
