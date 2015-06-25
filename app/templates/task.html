@@ -8,9 +8,9 @@
 <div class="container">
 
   <div class="center-align">
-    <a href="{{ url_for('main.client', id=task.section.magazine.owner.id) }}" class="waves-effect waves-light btn">{{ task.section.magazine.owner.name }}</a> <a href="{{ url_for('main.edit_client', id=task.section.magazine.owner.id) }}" class="waves-effect waves-light btn">Edit Client</a>
-    <a href="{{ url_for('main.magazine', id=task.section.magazine.id) }}" class="waves-effect waves-light btn">{{ task.section.magazine.name }}</a>
-    <a href="{{ url_for('main.edit_magazine', id=task.section.magazine.id) }}" class="waves-effect waves-light btn">Edit Magazine</a>
+    <a href="{{ url_for('main.client', id=task.magazine.owner.id) }}" class="waves-effect waves-light btn">{{ task.magazine.owner.name }}</a> <a href="{{ url_for('main.edit_client', id=task.magazine.owner.id) }}" class="waves-effect waves-light btn">Edit Client</a>
+    <a href="{{ url_for('main.magazine', id=task.magazine.id) }}" class="waves-effect waves-light btn">{{ task.magazine.name }}</a>
+    <a href="{{ url_for('main.edit_magazine', id=task.magazine.id) }}" class="waves-effect waves-light btn">Edit Magazine</a>
   </div>
 
 

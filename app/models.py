@@ -80,13 +80,15 @@ class Magazine(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(120))
 	client_mag = db.Column(db.String(120))
-	pages = db.Column(db.Integer)
+	page_count = db.Column(db.Integer)
 	active = db.Column(db.Boolean, default=True)
 	published = db.Column(db.DateTime)
 	note = db.Column(db.Text)
 	status = db.Column(db.String(40), default='active')
 	client_id = db.Column(db.Integer, db.ForeignKey('clients.id'))
 	sales_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+	pages = db.relationship('Page', backref='magazine', lazy='dynamic')
+	tasks = db.relationship('Task', backref='magazine', lazy='dynamic')
 	
 
 	def __repr__(self):

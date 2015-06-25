@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, TextField, \
-SelectField, DateField, IntegerField, SubmitField
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
+SelectField, DateField, IntegerField, TextAreaField, widgets, SubmitField
+from wtforms.ext.sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
 from wtforms.validators import InputRequired, Email, EqualTo, NumberRange, Optional
 from ..models import Client, User, Magazine, Page, Role
 
@@ -13,7 +13,7 @@ def get_all_magazines():
 	return Magazine.query.filter_by(active=True).filter_by(published=None).all()
 
 def get_all_pages():
-	return Page.query.filter_by().all()
+	return Page.query.filter_by(magazine_id=id).all()
 
 def get_all_users():
 	return User.query.all()
@@ -26,6 +26,10 @@ def get_all_designers():
 
 def get_all_roles():
 	return Role.query.all()
+
+class MultiCheckboxField(QuerySelectMultipleField):
+	widget = widgets.ListWidget(prefix_label=False)
+	option_widget = widgets.CheckboxInput()
 
 
 class EditUser(Form):
@@ -71,10 +75,10 @@ class EditTask(Form):
 	name = StringField('Task Name', validators=[InputRequired()])
 	description = TextField('Description')
 	due_date = DateField(format='%m/%d/%Y')
-	page = StringField('Page Number', validators=[InputRequired(), NumberRange(min=1,max=64, message='You entered an invalid page number.')])
 	status = SelectField('Status', choices=[('active', 'Active'), ('road-blocked', 'Road Blocked'), \
 		('finished', 'Finished'), ('inactive', 'Inactive')], validators=[InputRequired()])
-	note = TextField('Notes')
+	note = TextAreaField('Notes')
+	pages = MultiCheckboxField('Pages', get_label='number')
 	submit = SubmitField()
 
 
@@ -83,3 +87,6 @@ class LogIn(Form):
 	password = PasswordField('Password', validators=[InputRequired()])
 	remember_me = BooleanField('Keep me logged in')
 	submit = SubmitField('Sign In')
+
+class SetPage(Form):
+	magazine = QuerySelectField()

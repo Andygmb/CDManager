@@ -32,7 +32,7 @@
             <h4 class="grey-text text-darken-4"><a href="{{ url_for('main.magazine', id=mag.id) }}">{{ mag.name }}</a></h4>
           </div>
           <p>Sales Person: {{ mag.sales_person }}</p>
-          <p>Pages: {{ mag.pages }}</p>
+          <p>Pages: {{ mag.page_count }}</p>
           <p>Contact: <a href="mailto:{{ mag.owner.email }}">{{ mag.owner.contact }}</a></p>
           <p>Notes: {{ mag.note }}</p>
           <p>Published: {% if mag.published %}{{ mag.published }}{% endif %}</p>

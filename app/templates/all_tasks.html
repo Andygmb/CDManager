@@ -12,12 +12,13 @@
       <div class="card-panel black-text {{ task.status }}">
         <div class="card-title">
           <a href="{{ url_for('main.edit_task', id=task.id) }}" class="waves-effect waves-light btn right">Edit Task</a>
-          <h4><a href="{{ url_for('main.task', id=task.id) }}">{{ task.section.magazine.owner.name }}</a> - <a href="{{ url_for('main.task', id=task.id) }}">{{ task.name }}</a></h4>
+          <h4><a href="{{ url_for('main.task', id=task.id) }}">{{ task.magazine.owner }}</a> - <a href="{{ url_for('main.task', id=task.id) }}">{{ task.name }}</a></h4>
         </div>
         <p>Assigned to: <a href="{{ url_for('main.user', id=task.employee.id) }}">{{ task.employee }}</a></p>
         <p>Due Date: {{ moment(task.due_date).format('MMMM Do YYYY') }}</p>
         <p>Description: {{ task.description }}</p>
         <p>Notes: {{ task.note }}</p>
+        <p>Pages: {% for page in task.pages %}{{ page.number }} {% endfor %}</p>
       </div>
     </div>
   {% endfor %}

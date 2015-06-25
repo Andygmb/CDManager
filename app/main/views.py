@@ -105,7 +105,7 @@ def add_magazine():
 		mag = Magazine(name=form.name.data,
 						owner=form.owner.data,
 						sales_person=form.sales_person.data,
-						pages=form.pages.data,
+						page_count=form.pages.data,
 						client_mag='{} - {}'.format(form.owner.data, form.name.data),
 						note=form.note.data)
 
@@ -128,26 +128,38 @@ def add_magazine():
 	return render_template('form.html', form=form)
 
 
-@main.route('/add/task', methods=['GET', 'POST'])
+@main.route('/<int:mag>/add/task', methods=['GET', 'POST'])
 @login_required
-def add_task():
-	form = EditTask()
+def add_task(mag):
 
-	if form.validate_on_submit():
+	mag = Magazine.query.get(mag)
 
-		task = Task(name=form.name.data,
-					description=form.description.data,
-					create_date=datetime.utcnow(),
-					status=form.status.data,
-					note=form.note.data,
-					employee=form.employee.data)
+	if mag:
 
-		db.session.add(task)
-		db.session.commit()
-		flash('Task successfully added.')
-		return redirect(url_for('.all_tasks'))
+		form = EditTask()
+		form.pages.query = mag.pages
+		
+		if form.validate_on_submit():
 
-	return render_template('form.html', form=form)
+			task = Task(name=form.name.data,
+						description=form.description.data,
+						create_date=datetime.utcnow(),
+						status=form.status.data,
+						note=form.note.data,
+						employee=form.employee.data,
+						pages=form.pages.data,
+						magazine=mag)
+
+			db.session.add(task)
+			db.session.commit()
+
+			flash('Task successfully added.')
+			return redirect(url_for('.all_tasks'))
+
+		return render_template('form.html', form=form)
+
+	flash('That magazine does not exist.')
+	return render_template(url_for(all_magazines))
 
 
 @main.route('/edit/user/<int:id>', methods=['GET', 'POST'])
@@ -225,7 +237,7 @@ def edit_magazine(id):
 			mag.name = form.name.data
 			mag.owner = form.owner.data
 			mag.sales_person = form.sales_person.data
-			mag.pages = form.pages.data
+			mag.page_count = form.pages.data
 			mag.note = form.note.data
 			mag.client_mag = '{} - {}'.format(mag.owner.name, mag.name)
 
@@ -242,40 +254,15 @@ def edit_magazine(id):
 	return redirect(url_for('.all_magazines'))
 
 
-@main.route('/edit/section/<int:id>', methods=['GET', 'POST'])
-@login_required
-def edit_section(id):
-	section = Section.query.get(id)
-
-	if section is not None:
-		form = EditSection(obj=section)
-
-		if form.validate_on_submit():
-
-			section.magazine = form.magazine.data
-			section.client = form.client.data
-			section.name = form.name.data
-			section.mag_section = '{} - {}'.format(form.magazine.data, form.name.data)
-			section.note = form.note.data
-
-			db.session.commit()
-
-			flash('Section edited successfully.')
-			return redirect(url_for('.section', id=id))
-
-		return render_template('form.html', form=form)
-
-	flash('That section does not exist.')
-	return redirect(url_for('.all_magazines'))
-
-
 @main.route('/edit/task/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_task(id):
 	task = Task.query.get(id)
 
 	if task is not None:
+		mag = Magazine.query.get(task.magazine_id)
 		form = EditTask(obj=task)
+		form.pages.query = mag.pages
 
 		if form.validate_on_submit():
 
@@ -283,26 +270,11 @@ def edit_task(id):
 			task.description = form.description.data
 			task.status = form.status.data
 			task.due_date = form.due_date.data
-			task.section = form.section.data
 			task.employee = form.employee.data
 			task.note = form.note.data
+			task.pages = form.pages.data
 
-			#Review this section it's. It seems really hacky.
-			section = form.section.data
-
-			sections = section.magazine.sections
-
-			for s in sections:
-				for task in s.tasks:
-					if task.status == 'road-blocked':
-						task.section.status = 'road-blocked'
-						task.section.magazine.status = 'road-blocked'
-						break
-					else:
-						task.section.status = 'active'
-						task.section.magazine.status = 'active'
-
-
+			db.session.add(task)
 			db.session.commit()
 
 			flash('Task successfully edited.')
@@ -310,7 +282,6 @@ def edit_task(id):
 
 		return render_template('form.html', form=form)
 
-	flash('That section does not exist.')
 	return redirect(url_for('.all_magazines'))
 
 
@@ -348,20 +319,6 @@ def archive_client(id):
 
 		if magazines:
 			for magazine in magazines:
-				sections = Section.query.filter_by(magazine=magazine)
-
-				if sections:
-					for section in sections:
-						tasks = Task.query.filter_by(section=section)
-
-						if tasks:
-							for task in tasks:
-								task.active = False
-								db.session.commit()
-
-						section.active = False
-						db.session.commit()
-
 				magazine.active = False
 				db.session.commit()
 
