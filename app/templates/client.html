@@ -25,21 +25,7 @@
 
   <h4>Magazines</h4>
   {% for mag in client.magazines %}
-    <div class="row">
-      <div class="col s12">
-        <div class="card-panel black-text">
-          <div class="card-title" style="clear:both;">
-            <h4 class="grey-text text-darken-4"><a href="{{ url_for('main.magazine', id=mag.id) }}">{{ mag.name }}</a></h4>
-          </div>
-          <p>Sales Person: {{ mag.sales_person }}</p>
-          <p>Pages: {{ mag.page_count }}</p>
-          <p>Contact: <a href="mailto:{{ mag.owner.email }}">{{ mag.owner.contact }}</a></p>
-          <p>Notes: {{ mag.note }}</p>
-          <p>Published: {% if mag.published %}{{ mag.published }}{% endif %}</p>
-        </div>
-      </div>
-    </div>
-
+    {% include 'ind_magazine.html' %}
   {% endfor %}
 
 	

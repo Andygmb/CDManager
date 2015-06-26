@@ -1,28 +1,16 @@
 {% extends "base.html" %}
 
+{% block pagetitle %}
+    {{ user.name }} <a class="waves-effect waves-light btn blue" href="{{ url_for('main.user', id=user.id) }}">Edit User</a>
+{% endblock %}
+
 {% block content %}
 <div class="container">
 
-  <h1>{{ user.name }} - <a href="{{ url_for('main.edit_user', id=user.id) }}">Edit User</a></h1>
+  {% for task in user.tasks %}
+    {% include 'ind_task.html' %}
+  {% endfor %}
 
-	<table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Task</th>
-          <th>Task Description</th>
-          <th>Due Date</th>
-        </tr>
-      </thead>
-      <tbody>
-      {% for task in user.tasks %}
-        <tr>
-          <td>{{ task.name }}</td>
-          <td>{{ task.description }}</td>
-          <td>{{ task.due_date }}</td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
 	
 </div>
 {% endblock %}

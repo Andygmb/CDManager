@@ -1,11 +1,33 @@
 from flask import render_template, flash, redirect, url_for
-from flask.ext.login import login_user, logout_user, login_required
+from flask.ext.login import login_user, logout_user, login_required, current_user
 from .. import db
 from ..models import User, Client, Magazine, Page, Task
 from . import main
 from .forms import EditUser, EditClient, EditMag, EditMag, EditTask, LogIn
 from datetime import datetime
+import os
+import sendgrid
 
+sg = sendgrid.SendGridClient(os.environ.get('SENDGRIDUSER'), os.environ.get('SENDGRIDPASS'),raise_errors=True)
+
+def send_email(to, subject, text, sender, html=None):
+	message = sendgrid.Mail()
+	message.add_to(to)
+	message.set_subject(subject)
+	message.set_text(text)
+	message.set_from(sender)
+
+	if html:
+		message.set_html(html)
+
+	try:
+		sg.send(message)
+	except SendGridClientError:
+		flash('There was a problem sending the email.')
+		return redirect(url_for('all_tasks'))
+	except SendGridServerError:
+		flash('There was a problem sending the email.')
+		return redirect(url_for('all_tasks'))
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
@@ -147,11 +169,15 @@ def add_task(mag):
 						status=form.status.data,
 						note=form.note.data,
 						employee=form.employee.data,
+						assigner=current_user,
 						pages=form.pages.data,
 						magazine=mag)
 
 			db.session.add(task)
 			db.session.commit()
+
+			send_email(task.employee.email, "You've been assigned a new task", \
+				"{} - {}".format(task.name, task.description), 'matt@customdm.com')
 
 			flash('Task successfully added.')
 			return redirect(url_for('.all_tasks'))
@@ -275,6 +301,20 @@ def edit_task(id):
 			task.pages = form.pages.data
 
 			db.session.add(task)
+			db.session.commit()
+
+			if task.status == 'road-blocked':
+				send_email(task.assigner.email, "One of your tasks is road blocked.", \
+				"{} - {}".format(task.name, task.description), 'matt@customdm.com')
+
+			for task in mag.tasks:
+				if task.status == 'road-blocked':
+					mag.status = 'road-blocked'
+					break
+			else:
+				mag.status = 'active'
+
+			db.session.add(mag)
 			db.session.commit()
 
 			flash('Task successfully edited.')
