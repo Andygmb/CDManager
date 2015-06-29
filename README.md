@@ -31,11 +31,15 @@ Note: Screenshots coming soon. Any web designers who would like to contribute to
 # Road Map
 
 * Add the ability to populate the database from a CSV file (Mostly done but not ready yet)
+* Add default username/password to DB
+
+# Recently Completed Features
+
 * Add automatic email to the magazines sales person when an employee is road blocked on a task
 * Add automatic email to employee when they are assigned a new task
 * Add option to assign tasks to specific pages of each magazine
 * Expand user system to utilize roles for ease of future expansion
-* Add default username/password to DB
+* Implement a material design
 
 
 # Getting Started
@@ -111,88 +115,32 @@ From here you should be good to go. For instructions on using the application re
 
 ### All Clients
 
-|Name         | Contact             | Address         | Phone | Note            |
-|-------------|---------------------|-----------------|-------|-----------------|
-|Company Name | Contact Person Name | Company Address | Phone | Additional Notes|
+![All clients page](http://i.imgur.com/I66o5tK.png)
 
 The company name is also linked so you can get a view of all of the information about that individual company including all of their magazines and all of their active tasks.
 
 ### Specific Client
 
-Client Info (Link to edit client)
+![Specific client's page](http://i.imgur.com/3nAHHK0.png)
 
-|Contact             | Email         | Address         | Phone | Active                              |
-|--------------------|---------------|-----------------|-------|-------------------------------------|
-|Contact Person Name | Contact Email | Company Address | Phone | Whether the client is active or not |
+The red circle with the plus is the button to add a task to that magazine.
 
-Client Notes
-
-Any additional notes written about the client.
-
-Magazines
-
-|Name          | Sales Person      | Pages      | Published                         |
-|--------------|-------------------|------------|-----------------------------------|
-|Magazine Name | Sales Person Name | # of Pages | Whether the magazine is published |
-
-**Note: Each magazine is also color coded. The magazine will be green if all of the active tasks are running smoothly. It will switch to red if any of the tasks have been marked as _'Road Blocked'_.**
+**Note: The magazine's card will be red if a task in the magazine is currently road-blocked. Otherwise it will be white.**
 
 ### All Magazines
 
-|Company      | Magazine Name | Pages      | Contact        | Notes            |
-|-------------|---------------|------------|----------------|------------------|
-|Company Name | Magazine Name | # of Pages | Contact Person | Additional Notes |
+![All magazines](http://i.imgur.com/iu3t1gi.png)
 
-**Note: The _Company_ field will link directly to that _Client_'s page. The _Magazine Name_ field will link directly to that specific magazine's page. The _Contact_ field will create a clickable link that will open a new email to that person.**
-
-**The rows are also color coded. The row will be green if all of the tasks are running smoothly. It will switch to red if any of the tasks have been marked as _'Road Blocked'_.**
+Each magazine will have it's own card. The red circle with the plus sign is to add a task to that magazine.
 
 ### Specific Magazine
 
-Magazine Name (Link to edit magazine)
-Company Name (Linked to that company's specific page)
-
-
-Magazine Info
-
-|Contact             | Email         | Address         | Phone | Pages                               |
-|--------------------|---------------|-----------------|-------|-------------------------------------|
-|Contact Person Name | Contact Email | Company Address | Phone | Whether the client is active or not |
-
-Notes
-Any notes for the magazine
-
-Tasks
-
-|Name      | Description      | Due Date | Assigned To                  |
-|----------|------------------|----------|------------------------------|
-|Task Name | Task Description | Due Data | User the task is assigned to |
-
-**Note: The _Name_ field will also link to the individual _Task_'s page. The _Assigned To_ field will also link directly to that specific _User_'s page so you can see what that _User_ currently has assigned to them.**
+![Specific magazine](http://i.imgur.com/cUeCV6N.png)
 
 ### All Users
 
-User's Tasks
-
-|User      | Magazine             | Assigned Tasks | Task Descriptions   |
-|----------|----------------------|----------------|---------------------|
-|User Name | Magazine task is for | Task Name      | Description of task |
-|          | Magazine task is for | Task Name      | Description of task |
-|Next User | Magazine task is for | Task Name      | Description of task |
-|          | Magazine task is for | Task Name      | Description of task |
-
-**Note: The system will show every _Task_ for a specific _User_ and then show the next _User_ and all of their tasks.**
-
-**The _User_ field will link to that specific _User_'s page. The _Magazine_ field will link directly to that specific _Magazine_'s page. The _Assigned_ _Task_'s field will link directly to that specific _Task_'s page.**
-
-**The rows are also color coded. They will be green if they are active or red if the _Task_ is "_Road Blocked_".**
+![All users](http://i.imgur.com/4kq3weq.png)
 
 ### Specific User
 
-User Name - (Link to edit user)
-
-|Task      | Task Description | Due Date |
-|----------|------------------|----------|
-|Task Name | Task description | Due Date |
-
-**Note: The _Task_ field will link directly to that specific _Task_'s page.**
+![Specific user](http://i.imgur.com/xhqv70g.png)
