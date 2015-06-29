@@ -310,11 +310,11 @@ def edit_task(id):
 			for task in mag.tasks:
 				if task.status == 'road-blocked':
 					mag.status = 'road-blocked'
+					db.session.commit()
 					break
 			else:
 				mag.status = 'active'
 
-			db.session.add(mag)
 			db.session.commit()
 
 			flash('Task successfully edited.')
@@ -362,9 +362,13 @@ def archive_client(id):
 				magazine.active = False
 				db.session.commit()
 
+				for task in magazine.tasks:
+					task.active = False
+					db.session.commit()
+
 		client.active = False
 		db.session.commit()
-		flash('The client, any associated magazines, their sections and their tasks have been archived.')
+		flash('The client, any associated magazines and their tasks have been archived.')
 		return redirect(url_for('.all_clients'))
 
 	flash('No such client exists.')
@@ -377,47 +381,15 @@ def archive_magazine(id):
 	magazine = Magazine.query.get(id)
 
 	if magazine:
-		sections = Section.query.filter_by(magazine=magazine)
+		for task in magazine.tasks:
+					task.active = False
+					db.session.commit()
 
-		if sections:
-			for section in sections:
-				tasks = Task.query.filter_by(section=section)
-
-				if tasks:
-					for task in tasks:
-						task.active = False
-						db.session.commit()
-
-				section.active = False
-				db.session.commit()
-
-		flash("The magazine, its associated sections and their tasks have been archived.")
+		flash("The magazine and its tasks have been archived.")
 		return redirect(url_for('.all_magazines'))
 
 	flash('No such magazine exists.')
 	return redirect(url_for('.all_magazines'))
-
-
-@main.route('/archive/section/<int:id>')
-@login_required
-def archive_section():
-	section = Section.query.get(id)
-
-	if section:
-		tasks = Task.query.filter_by(section=section)
-
-		if tasks:
-			for task in tasks:
-				task.active = False
-				db.session.commit()
-
-		section.active = False
-		db.session.commit()
-		flash('The section and its associated tasks have been archived.')
-		return render_template('all_sections')
-
-	flash('No such section exists.')
-	return render_template('all_sections')
 
 
 @main.route('/delete/user/<int:id>')
@@ -453,12 +425,9 @@ def delete_client(id):
 
 		if magazines:
 			for magazine in magazines:
-				tasks = Task.query.filter_by(magazine=magazine).all()
-
-				if tasks:
-					for task in tasks:
-						db.session.delete(task)
-						db.session.commit()
+				for task in magazine.tasks:
+					db.session.delete(task)
+					db.session.commit()
 
 				db.session.delete(magazine)
 				db.session.commit()
@@ -478,12 +447,9 @@ def delete_magazine(id):
 	magazine = Magazine.query.get(id)
 
 	if magazine:
-		tasks = Task.query.filter_by(magazine=magazine).all()
-
-		if tasks:
-			for task in tasks:
-				db.session.delete(task)
-				db.session.commit()
+		for task in magazine.tasks:
+			db.session.delete(task)
+			db.session.commit()
 
 		db.session.delete(magazine)
 		db.session.commit()
@@ -502,6 +468,8 @@ def delete_task(id):
 	if task:
 		db.session.delete(task)
 		db.session.commit()
+		flash('The task has been deleted.')
+		redirect(url_for('.all_tasks'))
 
 	flash('No such task exists.')
 	return redirect(url_for('.all_tasks'))
@@ -518,7 +486,6 @@ def all_users():
 @main.route('/clients')
 @login_required
 def all_clients():
-
 	clients = Client.query.filter_by(active=True).order_by(Client.name.asc()).all()
 
 	return render_template('all_clients.html', clients=clients)
@@ -532,12 +499,6 @@ def all_magazines():
 
 	return render_template('all_mags.html', magazines=magazines)
 
-@main.route('/sections')
-@login_required
-def all_sections():
-	sections = Section.query.filter_by(active=True).all()
-
-	return render_template('all_sections.html', sections=sections)
 
 @main.route('/tasks')
 @login_required
@@ -581,17 +542,6 @@ def magazine(id):
 		return redirect(url_for('.all_magazines'))
 
 	return render_template('magazine.html', mag=mag)
-
-@main.route('/section/<int:id>')
-@login_required
-def section(id):
-	section = Section.query.get(id)
-
-	if not section:
-		flash('That section does not exist.')
-		return redirect(url_for('.all_sections'))
-
-	return render_template('section.html', section=section)
 
 
 @main.route('/task/<int:id>')
