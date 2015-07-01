@@ -8,6 +8,7 @@ now = datetime.now()
 tasks = Task.query.filter_by(status='active').all()
 
 for task in tasks:
-	if task.due_date < now:
-		send_email(task.assigner.email, \
-			'One of your tasks has passed its due date', "{} - {}".format(task.name, task.description), 'matt@customdm.com')
+    if task.due_date < now:
+        send_email(task.assigner.email, \
+            'One of your tasks has passed its due date', "{} - {}".format(task.name, task.description), 'matt@customdm.com')
+

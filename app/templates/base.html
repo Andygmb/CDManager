@@ -1,108 +1,107 @@
 <html>
-	<head>
-		{% block meta %}
-			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-			<meta http-equiv="X-UA-Compatible" content="IE=edge">
-			<meta name="msapplication-tap-highlight" content="no">
-			<meta name="description" content="Materialize is a modern responsive CSS framework based on Material Design by Google. ">
-		{% endblock %}
+    <head>
+        {% block meta %}
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="msapplication-tap-highlight" content="no">
+            <meta name="description" content="Materialize is a modern responsive CSS framework based on Material Design by Google. ">
+        {% endblock %}
 
-		{% block styles %}
-			<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='materialize.min.css') }}">
-			<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='prism.css') }}">
-			<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='ghpages-materialize.css') }}">
-			<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
-			<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Inconsolata">
-		{% endblock %}
+        {% block styles %}
+            <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='materialize.min.css') }}">
+            <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='prism.css') }}">
+            <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='ghpages-materialize.css') }}">
+            <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+            <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Inconsolata">
+        {% endblock %}
 
-		{% block scripts %}
+        {% block scripts %}
 
-			<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-			<script type="text/javascript" src="{{ url_for('static', filename='materialize.min.js') }}"></script>
+            <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+            <script type="text/javascript" src="{{ url_for('static', filename='materialize.min.js') }}"></script>
 
-			{{ moment.include_moment() }}
+            {{ moment.include_moment() }}
 
-		{% endblock %}
+        {% endblock %}
 
-		<title>{% block title %}Management System{% endblock %}</title>
+        <title>{% block title %}Management System{% endblock %}</title>
 
-	</head>
+    </head>
 
 <body>
-	{% block nav %}
-		<header>
-			<nav class="top-nav">
-	        <div class="container">
-	          <div class="nav-wrapper">
-	            <a class="page-title">{% block pagetitle %}CDManager {% endblock%} </a>
-	          </div>
-	        </div>
-	      </nav>
-	      <div class="container">
-	        <a href="#" data-activates="nav-mobile" class="button-collapse top-nav full"><i class="mdi-navigation-menu"></i></a>
-	      </div>
-	      <ul id="nav-mobile" class="side-nav fixed">
-	        <li class="logo"><a id="logo-container" href="http://materializecss.com/" class="brand-logo"><img src="http://customdesignmags.com/templates/theme1189/images/logo/logo.png" style="width:150px;"></a></li>
-	        <li class="bold"><a href="{{ url_for('main.all_magazines') }}" class="waves-effect waves-orange">Home</a></li>
-	        <li class="no-padding">
-	          <ul class="collapsible collapsible-accordion">
-	            <li class="bold"><a class="collapsible-header waves-effect waves-orange">Clients</a>
-	              <div class="collapsible-body">
-	                <ul>
-	                  <li><a href="{{ url_for('main.all_clients') }}">All Clients</a></li>
-	                  <li><a href="{{ url_for('main.add_client') }}">Add Client</a></li>
-	                </ul>
-	              </div>
-	            </li>
-	            <li class="bold"><a class="collapsible-header  waves-effect waves-orange">Magazines</a>
-	              <div class="collapsible-body">
-	                <ul>
-	                  <li><a href="{{ url_for('main.all_magazines') }}">All Magazines</a></li>
-	                  <li><a href="{{ url_for('main.add_magazine') }}">Add Magazine</a></li>
-	                </ul>
-	              </div>
-	            </li>
-	            <li class="bold"><a class="collapsible-header  waves-effect waves-orange">Tasks</a>
-	              <div class="collapsible-body">
-	                <ul>
-	                  <li><a href="{{ url_for('main.all_tasks') }}">All Tasks</a></li>
-	                </ul>
-	              </div>
-	            </li>
-	            <li class="bold"><a class="collapsible-header  waves-effect waves-orange">Users</a>
-	              <div class="collapsible-body">
-	                <ul>
-	                  <li><a href="{{ url_for('main.all_users') }}">All Users</a></li>
-	                  {% if current_user.is_authenticated() %}
-	                  {% if current_user.role.name == 'Admin' %}
-	                  <li><a href="{{ url_for('main.add_user') }}">Add User</a></li>
-	                  {% endif %}
-	                  {% endif %}
-	                </ul>
-	              </div>
-	            </li>
-	          </ul>
-	        </li>
-	        <li class="bold"><a href="{{ url_for ('main.logout') }}" class="waves-effect waves-orange">Sign Out</a></li>
-	      </ul>
-		</header>
-	{% endblock %}
+    {% block nav %}
+        <header>
+            <nav class="top-nav">
+            <div class="container">
+              <div class="nav-wrapper">
+                <a class="page-title">{% block pagetitle %}CDManager {% endblock%} </a>
+              </div>
+            </div>
+          </nav>
+          <div class="container">
+            <a href="#" data-activates="nav-mobile" class="button-collapse top-nav full"><i class="mdi-navigation-menu"></i></a>
+          </div>
+          <ul id="nav-mobile" class="side-nav fixed">
+            <li class="logo"><a id="logo-container" href="http://materializecss.com/" class="brand-logo"><img src="http://customdesignmags.com/templates/theme1189/images/logo/logo.png" style="width:150px;"></a></li>
+            <li class="bold"><a href="{{ url_for('main.all_magazines') }}" class="waves-effect waves-orange">Home</a></li>
+            <li class="no-padding">
+              <ul class="collapsible collapsible-accordion">
+                <li class="bold"><a class="collapsible-header waves-effect waves-orange">Clients</a>
+                  <div class="collapsible-body">
+                    <ul>
+                      <li><a href="{{ url_for('main.all_clients') }}">All Clients</a></li>
+                      <li><a href="{{ url_for('main.add_client') }}">Add Client</a></li>
+                    </ul>
+                  </div>
+                </li>
+                <li class="bold"><a class="collapsible-header  waves-effect waves-orange">Magazines</a>
+                  <div class="collapsible-body">
+                    <ul>
+                      <li><a href="{{ url_for('main.all_magazines') }}">All Magazines</a></li>
+                      <li><a href="{{ url_for('main.add_magazine') }}">Add Magazine</a></li>
+                    </ul>
+                  </div>
+                </li>
+                <li class="bold"><a class="collapsible-header  waves-effect waves-orange">Tasks</a>
+                  <div class="collapsible-body">
+                    <ul>
+                      <li><a href="{{ url_for('main.all_tasks') }}">All Tasks</a></li>
+                    </ul>
+                  </div>
+                </li>
+                <li class="bold"><a class="collapsible-header  waves-effect waves-orange">Users</a>
+                  <div class="collapsible-body">
+                    <ul>
+                      <li><a href="{{ url_for('main.all_users') }}">All Users</a></li>
+                      {% if current_user.is_authenticated() %}
+                      {% if current_user.role.name == 'Admin' %}
+                      <li><a href="{{ url_for('main.add_user') }}">Add User</a></li>
+                      {% endif %}
+                      {% endif %}
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li class="bold"><a href="{{ url_for ('main.logout') }}" class="waves-effect waves-orange">Sign Out</a></li>
+          </ul>
+        </header>
+    {% endblock %}
 
-	{% block body %}
+    {% block body %}
 
-		<main>
-	    	{% for message in get_flashed_messages() %}
-				<script>Materialize.toast('{{ message }}', 8000)</script>
-					
-			{% endfor %}
+        <main>
+            {% for message in get_flashed_messages() %}
+                <script>Materialize.toast('{{ message }}', 8000)</script>
+            {% endfor %}
 
-			{% block content %}
+            {% block content %}
 
-			{% endblock %}
-		</main>
+            {% endblock %}
+        </main>
 
-	{% endblock %}
+    {% endblock %}
 
 </body>
 
