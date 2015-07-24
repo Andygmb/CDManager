@@ -35,7 +35,7 @@ class User(UserMixin, db.Model):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
+
 
     def __repr__(self):
         return '{}'.format(self.name)
@@ -89,14 +89,14 @@ class Magazine(db.Model):
     sales_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     pages = db.relationship('Page', backref='magazine', lazy='dynamic')
     tasks = db.relationship('Task', backref='magazine', lazy='dynamic')
-    
+
 
     def __repr__(self):
         return '{}'.format(self.name)
 
 
 
-pages_tasks = db.Table('pages_tasks', 
+pages_tasks = db.Table('pages_tasks',
     db.Column('page_id', db.Integer, db.ForeignKey('pages.id')),
     db.Column('task_id', db.Integer, db.ForeignKey('tasks.id'))
     )
@@ -109,7 +109,7 @@ class Page(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     number = db.Column(db.String(120))
     magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
-    tasks = db.relationship('Task', secondary=pages_tasks, 
+    tasks = db.relationship('Task', secondary=pages_tasks,
         backref=db.backref('pages', lazy='dynamic'), lazy='dynamic')
 
 
@@ -121,7 +121,7 @@ class Task(db.Model):
     name = db.Column(db.String(50))
     description = db.Column(db.Text)
     create_date = db.Column(db.DateTime)
-    due_date = db.Column(db.DateTime)
+    due_date = db.Column(db.Date)
     status = db.Column(db.String(50))
     note = db.Column(db.Text)
     active = db.Column(db.Boolean, default=True)

@@ -3,12 +3,13 @@ from flask.ext.login import login_user, logout_user, login_required, current_use
 from .. import db
 from ..models import User, Client, Magazine, Page, Task
 from . import main
-from .forms import EditUser, EditClient, EditMag, EditMag, EditTask, LogIn
+from .forms import EditUser, EditClient, EditMag, EditTask, LogIn
 from datetime import datetime
+from sendgrid import SendGridClientError, SendGridServerError
 import os
 import sendgrid
 
-sg = sendgrid.SendGridClient(os.environ.get('SENDGRIDUSER'), os.environ.get('SENDGRIDPASS'),raise_errors=True)
+sg = sendgrid.SendGridClient(os.environ.get('SENDGRIDUSER'), os.environ.get('SENDGRIDPASS'), raise_errors=True)
 
 def send_email(to, subject, text, sender, html=None):
     message = sendgrid.Mail()
@@ -24,10 +25,10 @@ def send_email(to, subject, text, sender, html=None):
         sg.send(message)
     except SendGridClientError:
         flash('There was a problem sending the email.')
-        return redirect(url_for('all_tasks'))
+        return redirect(url_for('.all_tasks'))
     except SendGridServerError:
         flash('There was a problem sending the email.')
-        return redirect(url_for('all_tasks'))
+        return redirect(url_for('.all_tasks'))
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
@@ -160,7 +161,7 @@ def add_task(mag):
 
         form = EditTask()
         form.pages.query = mag.pages
-        
+
         if form.validate_on_submit():
 
             task = Task(name=form.name.data,
@@ -171,6 +172,7 @@ def add_task(mag):
                         employee=form.employee.data,
                         assigner=current_user,
                         pages=form.pages.data,
+                        due_date=form.due_date.data,
                         magazine=mag)
 
             db.session.add(task)
