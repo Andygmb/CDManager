@@ -1,14 +1,16 @@
 from flask import render_template, flash, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from .. import db
-from ..models import User, Client, Magazine, Page, Task
+from ..models import User, Client, Magazine, Page, Task, Call
 from . import main
-from .forms import EditUser, EditClient, EditMag, EditMag, EditTask, LogIn
+from .forms import EditUser, EditClient, EditMag, EditTask, CallLog, LogIn
 from datetime import datetime
+from sendgrid import SendGridError, SendGridClientError, SendGridServerError
 import os
 import sendgrid
 
-sg = sendgrid.SendGridClient(os.environ.get('SENDGRIDUSER'), os.environ.get('SENDGRIDPASS'),raise_errors=True)
+sg = sendgrid.SendGridClient(os.environ.get('SENDGRIDUSER'), \
+    os.environ.get('SENDGRIDPASS'), raise_errors=True)
 
 def send_email(to, subject, text, sender, html=None):
     message = sendgrid.Mail()
@@ -24,10 +26,10 @@ def send_email(to, subject, text, sender, html=None):
         sg.send(message)
     except SendGridClientError:
         flash('There was a problem sending the email.')
-        return redirect(url_for('all_tasks'))
+        return redirect(url_for('.all_tasks'))
     except SendGridServerError:
         flash('There was a problem sending the email.')
-        return redirect(url_for('all_tasks'))
+        return redirect(url_for('.all_tasks'))
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
@@ -171,6 +173,7 @@ def add_task(mag):
                         employee=form.employee.data,
                         assigner=current_user,
                         pages=form.pages.data,
+                        due_date=form.due_date.data,
                         magazine=mag)
 
             db.session.add(task)
@@ -554,6 +557,20 @@ def task(id):
         return redirect(url_for('.all_tasks'))
 
     return render_template('task.html', task=task)
+
+
+@main.route('/call_log', methods=['GET', 'POST'])
+@login_required
+def call_log():
+    form = CallLog()
+
+    if form.validate_on_submit():
+        call = Call(company=form.company.data,
+                    person=form.person.data,
+                    notes=form.notes.data,
+                    called_date=datetime.utcnow)
+
+    return render_template('form.html', form=form)
 
 
 @main.route('/test')

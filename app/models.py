@@ -121,7 +121,7 @@ class Task(db.Model):
     name = db.Column(db.String(50))
     description = db.Column(db.Text)
     create_date = db.Column(db.DateTime)
-    due_date = db.Column(db.DateTime)
+    due_date = db.Column(db.Date)
     status = db.Column(db.String(50))
     note = db.Column(db.Text)
     active = db.Column(db.Boolean, default=True)
@@ -133,3 +133,13 @@ class Task(db.Model):
     def __repr__(self):
         return '{}'.format(self.name)
 
+
+class Call(db.Model):
+
+    __tablename__ = 'calls'
+
+    id = db.Column(db.Integer, primary_key=True)
+    company = db.Column(db.String(150))
+    person = db.Column(db.String(70))
+    notes = db.Column(db.Text)
+    called_date = db.Column(db.DateTime)

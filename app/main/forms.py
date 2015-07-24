@@ -7,19 +7,19 @@ from ..models import Client, User, Magazine, Page, Role
 
 
 def get_all_clients():
-    return Client.query.all()
+    return Client.query.filter_by(active=True).order_by(Client.name).all()
 
 def get_all_magazines():
-    return Magazine.query.filter_by(active=True).filter_by(published=None).all()
+    return Magazine.query.filter_by(active=True).filter_by(published=None).order_by(Magazine.name).all()
 
 def get_all_pages():
     return Page.query.filter_by(magazine_id=id).all()
 
 def get_all_users():
-    return User.query.all()
+    return User.query.order_by(User.name).all()
 
 def get_all_sales():
-    return User.query.filter_by(role_id=4).all()
+    return User.query.filter_by(role_id=4).order_by(User.name).all()
 
 def get_all_designers():
     return User.query.filter(User.role_id<=3).all()
@@ -88,5 +88,10 @@ class LogIn(Form):
     remember_me = BooleanField('Keep me logged in')
     submit = SubmitField('Sign In')
 
-class SetPage(Form):
-    magazine = QuerySelectField()
+
+class CallLog(Form):
+    company = StringField('Company', validators=[InputRequired()])
+    person = StringField('Person', validators=[InputRequired()])
+    notes = TextField('Notes')
+    submit = SubmitField('Submit')
+    
