@@ -132,3 +132,14 @@ class Task(db.Model):
 
     def __repr__(self):
         return '{}'.format(self.name)
+
+
+class Call(db.Model):
+
+    __tablename__ = 'calls'
+
+    id = db.Column(db.Integer, primary_key=True)
+    company = db.Column(db.String(150))
+    person = db.Column(db.String(70))
+    notes = db.Column(db.Text)
+    called_date = db.Column(db.DateTime)
