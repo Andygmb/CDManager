@@ -171,18 +171,15 @@ def add_task(mag):
                         status=form.status.data,
                         note=form.note.data,
                         employee=form.employee.data,
-                        assigner=current_user,
+                        assigned_by=current_user.get_id(),
                         pages=form.pages.data,
                         due_date=form.due_date.data,
                         magazine=mag)
 
-            send_email(task.employee.email, "You've been assigned a new task", \
-                "{} - {}".format(task.name, task.description), 'matt@customdm.com')
-
             db.session.add(task)
             db.session.commit()
 
-            send_email(task.employee.email, "You've been assigned a new task", \
+            send_email(task.assigner.email, "One of your tasks is road blocked.", \
                 "{} - {}".format(task.name, task.description), 'matt@customdm.com')
 
             flash('Task successfully added.')
@@ -584,8 +581,6 @@ def call_log():
 @main.route('/test')
 @login_required
 def test():
-    client = Client.query.filter_by(name='Estes Air').first()
-
-    test = Magazine.query.filter_by(owner=client).order_by('id desc').first()
+    test = current_user.get_id()
 
     return render_template('test.html', test=test)
