@@ -171,7 +171,7 @@ def add_task(mag):
                         status=form.status.data,
                         note=form.note.data,
                         employee=form.employee.data,
-                        assigned_by=current_user.get_id(),
+                        assigner=current_user.get_id(),
                         pages=form.pages.data,
                         due_date=form.due_date.data,
                         magazine=mag)
@@ -179,11 +179,11 @@ def add_task(mag):
             db.session.add(task)
             db.session.commit()
 
-            send_email(task.assigner.email, "One of your tasks is road blocked.", \
-                "{} - {}".format(task.name, task.description), 'matt@customdm.com')
+            send_email(task.employee.email, "You've been assigned a new task.", \
+                "{} - {}".format(task.name, task.description), task.assigner.email)
 
             flash('Task successfully added.')
-            return redirect(url_for('.all_tasks'))
+            return redirect(url_for('.magazine', id=mag.id))
 
         return render_template('form.html', form=form)
 
@@ -273,6 +273,10 @@ def edit_magazine(id):
             if form.published.data == 'published':
                 mag.published = datetime.utcnow()
 
+                for task in mag.tasks:
+                    task.active = False
+                    db.session.commit()
+
             db.session.commit()
             flash('Magazine successfully edited.')
             return redirect(url_for('.magazine', id=id))
@@ -306,9 +310,19 @@ def edit_task(id):
             db.session.add(task)
             db.session.commit()
 
+            #Check if I could remove this line and just let the for loop run and check all the tasks
             if task.status == 'road-blocked':
-                send_email(task.assigner.email, "One of your tasks is road blocked.", \
-                "{} - {}".format(task.name, task.description), 'matt@customdm.com')
+                assigner = User.query.get(task.assigner.id)
+
+                send_email(assigner.email, "One of your tasks is road blocked.", \
+                "{} - {}".format(task.name, task.description), task.employee.email)
+
+            elif task.status == 'inactive' or 'finished':
+                task.active = False
+
+            else:
+                send_email(task.employee.email, "One of your tasks has been edited.", \
+                "{} - {}".format(task.name, task.description), task.assigner.email)
 
             for task in mag.tasks:
                 if task.status == 'road-blocked':
@@ -321,7 +335,7 @@ def edit_task(id):
             db.session.commit()
 
             flash('Task successfully edited.')
-            return redirect(url_for('.task', id=id))
+            return redirect(url_for('.magazine', id=task.magazine_id))
 
         return render_template('form.html', form=form)
 
@@ -506,7 +520,7 @@ def all_magazines():
 @main.route('/tasks')
 @login_required
 def all_tasks():
-    tasks = Task.query.all()
+    tasks = Task.query.filter_by(active=True).all()
 
     return render_template('all_tasks.html', tasks=tasks)
 
