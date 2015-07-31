@@ -70,7 +70,7 @@ class EditMag(Form):
 
 
 class EditTask(Form):
-    employee = QuerySelectField('Assign To', query_factory=get_all_designers, get_label='name', 
+    employee = QuerySelectField('Assign To', query_factory=get_all_users, get_label='name', 
         validators=[InputRequired()])
     name = StringField('Task Name', validators=[InputRequired()])
     description = TextField('Description')
