@@ -140,7 +140,7 @@ def add_magazine():
 
         count = 1
 
-        while count < form.pages.data + 1:
+        while count < form.page_count.data + 1:
             page = Page(number=count, magazine_id=id)
             db.session.add(page)
             db.session.commit()
