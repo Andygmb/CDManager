@@ -176,6 +176,9 @@ def add_task(mag):
                         due_date=form.due_date.data,
                         magazine=mag)
 
+            send_email(task.employee.email, "You've been assigned a new task", \
+                "{} - {}".format(task.name, task.description), 'matt@customdm.com')
+
             db.session.add(task)
             db.session.commit()
 

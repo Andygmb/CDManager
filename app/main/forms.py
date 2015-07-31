@@ -64,7 +64,7 @@ class EditMag(Form):
     name = StringField('Magazine Name', validators=[InputRequired()])
     sales_person = QuerySelectField('Sales Person', query_factory=get_all_sales, get_label='name', 
         validators=[InputRequired()])
-    pages = IntegerField('Page Count', validators=[InputRequired()])
+    page_count = IntegerField('Page Count', validators=[InputRequired()])
     note = TextField('Notes')
     submit = SubmitField()
 
