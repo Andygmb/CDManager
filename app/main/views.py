@@ -171,7 +171,7 @@ def add_task(mag):
                         status=form.status.data,
                         note=form.note.data,
                         employee=form.employee.data,
-                        assigner=current_user.get_id(),
+                        assigned_by=current_user.get_id(),
                         pages=form.pages.data,
                         due_date=form.due_date.data,
                         magazine=mag)
