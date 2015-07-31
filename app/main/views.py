@@ -129,7 +129,7 @@ def add_magazine():
         mag = Magazine(name=form.name.data,
                         owner=form.owner.data,
                         sales_person=form.sales_person.data,
-                        page_count=form.pages.data,
+                        page_count=form.page_count.data,
                         client_mag='{} - {}'.format(form.owner.data, form.name.data),
                         note=form.note.data)
 
