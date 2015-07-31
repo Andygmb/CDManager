@@ -266,7 +266,7 @@ def edit_magazine(id):
             mag.name = form.name.data
             mag.owner = form.owner.data
             mag.sales_person = form.sales_person.data
-            mag.page_count = form.pages.data
+            mag.page_count = form.page_count.data
             mag.note = form.note.data
             mag.client_mag = '{} - {}'.format(mag.owner.name, mag.name)
 
