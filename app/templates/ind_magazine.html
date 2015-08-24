@@ -2,14 +2,25 @@
   <div class="card-panel black-text {{ mag.status }}">
     <div class="card-title" style="clear:both;">
       <a href="{{ url_for('main.edit_magazine', id=mag.id) }}" class="waves-effect waves-light btn right">Edit Magazine</a>
-      <h4 class="grey-text text-darken-4"><a href="{{ url_for('main.magazine', id=mag.id) }}">{{ mag.name }}</a></h4>
+      <h4 class="grey-text text-darken-4"><a href="{{ url_for('main.client', id=mag.owner.id) }}">{{ mag.owner }}</a><br>
+          <a href="{{ url_for('main.magazine', id=mag.id) }}">{{ mag.name }}</a></h4>
     </div>
-    <p>Client: <a href="{{ url_for('main.client', id=mag.owner.id) }}">{{ mag.owner }}</a></p>
-    <p>Contact: <a href="mailto:{{ mag.owner.email }}">{{ mag.owner.contact }}</a></p>
-    <p>Address: {{ mag.owner.address }}</p>
-    <p>Phone: {{ mag.owner.phone }}</p>
-    <p>Pages: {{ mag.page_count }}</p>
+    <p>Page Count: {{ mag.page_count }}</p>
+    <p>Contacts:
+        <ul class="collapsible" data-collapsible="accordion">
+            {% if clients %}
+                  {% for contact in client.contacts %}
+                    {% include 'contact.html' %}
+                  {% endfor %}
+            {% elif mag %}
+                {% for contact in mag.owner.contacts %}
+                    {% include 'contact.html' %}
+                  {% endfor %}
+            {% endif %}
+        </ul>
+    </p>
     <p>Notes: {{ mag.note }}</p>
-    <a class="btn-floating btn-large waves-effect waves-light red right" href="{{ url_for('main.add_task', mag=mag.id) }}"><i class="material-icons">+</i></a>
+    <a class="btn-floating btn-large waves-effect waves-light red right" href="{{ url_for('main.add_task', mag=mag.id) }}">
+        <i class="material-icons">+</i></a>
   </div>
 </div>

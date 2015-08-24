@@ -1,0 +1,7 @@
+<div class="col s12">
+  <div class="card-panel black-text {{ task.status }}">
+     <p>Posted by <a href="{{ url_for('main.user', id=comment.poster.id) }}">{{ comment.poster.name }}</a> {{ moment(timestamp=comment.posted_date,
+        local=True).format('MMMM Do YYYY, h:mm a') }}</p>
+        <p>{{ comment.text }}</p>
+  </div>
+</div>

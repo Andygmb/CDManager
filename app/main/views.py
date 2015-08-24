@@ -1,16 +1,17 @@
 from flask import render_template, flash, redirect, url_for
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from .. import db
-from ..models import User, Client, Magazine, Page, Task, Call
+from ..models import User, Client, Contact, Magazine, Page, Task, Comment, Call
 from . import main
-from .forms import EditUser, EditClient, EditMag, EditTask, CallLog, LogIn
+from .forms import EditUser, EditClient, EditMag, EditTask, EditContact, CallLog, LogIn
 from datetime import datetime
 from sendgrid import SendGridError, SendGridClientError, SendGridServerError
 import os
 import sendgrid
 
-sg = sendgrid.SendGridClient(os.environ.get('SENDGRIDUSER'), \
-    os.environ.get('SENDGRIDPASS'), raise_errors=True)
+sg = sendgrid.SendGridClient(os.environ.get('SENDGRIDUSER'),
+                             os.environ.get('SENDGRIDPASS'), raise_errors=True)
+
 
 def send_email(to, subject, text, sender, html=None):
     message = sendgrid.Mail()
@@ -30,6 +31,7 @@ def send_email(to, subject, text, sender, html=None):
     except SendGridServerError:
         flash('There was a problem sending the email.')
         return redirect(url_for('.all_tasks'))
+
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
@@ -72,7 +74,7 @@ def add_user():
 
             db.session.add(user)
             db.session.commit()
-            flash('User succesfully added.')
+            flash('User sucessfully added.')
 
             return redirect(url_for('.all_users'))
 
@@ -92,21 +94,8 @@ def add_client():
 
         if client is None:
             client = Client(name=form.name.data,
-                            owner=form.owner.data,
-                            owner_email=form.owner_email.data,
-                            owner_phone=form.owner_phone.data,
                             address=form.address.data,
                             note=form.note.data)
-
-            if not client.contact:
-                client.contact = form.owner.data
-                client.email = form.owner_email.data
-                client.phone = form.owner_phone.data
-
-            else:
-                client.contact = form.contact.data
-                client.email = form.email.data
-                client.phone = form.phone.data
 
             db.session.add(client)
             db.session.commit()
@@ -116,6 +105,34 @@ def add_client():
         else:
             flash('{} already exists.'.format(str(client)))
 
+    return render_template('form.html', form=form)
+
+
+@main.route('/<int:client_id>/add/contact', methods=['GET', 'POST'])
+@login_required
+def add_contact(client_id):
+    form = EditContact()
+
+    client = Client.query.get(client_id)
+
+    if form.validate_on_submit():
+        contact = Contact(first_name=form.first_name.data,
+                          last_name=form.last_name.data,
+                          name='{} {}'.format(form.first_name.data, form.last_name.data),
+                          position=form.position.data,
+                          main_email=form.main_email.data,
+                          main_phone=form.main_phone.data,
+                          company=client)
+
+        if form.secondary_email.data:
+            contact.secondary_email=form.secondary_email.data
+        if form.secondary_phone.data:
+            contact.secondary_phone=form.secondary_phone.data
+
+        db.session.add(contact)
+        db.session.commit()
+
+        return redirect(url_for('.client', id=client.id))
 
     return render_template('form.html', form=form)
 
@@ -127,11 +144,11 @@ def add_magazine():
 
     if form.validate_on_submit():
         mag = Magazine(name=form.name.data,
-                        owner=form.owner.data,
-                        sales_person=form.sales_person.data,
-                        page_count=form.page_count.data,
-                        client_mag='{} - {}'.format(form.owner.data, form.name.data),
-                        note=form.note.data)
+                       owner=form.owner.data,
+                       sales_person=form.sales_person.data,
+                       page_count=form.page_count.data,
+                       client_mag='{} - {}'.format(form.owner.data, form.name.data),
+                       note=form.note.data)
 
         db.session.add(mag)
         db.session.commit()
@@ -169,18 +186,55 @@ def add_task(mag):
                         description=form.description.data,
                         create_date=datetime.utcnow(),
                         status=form.status.data,
-                        note=form.note.data,
                         employee=form.employee.data,
                         assigned_by=current_user.get_id(),
                         pages=form.pages.data,
-                        due_date=form.due_date.data,
                         magazine=mag)
+
+            if form.due_date.data:
+                task.due_date=form.due_date.data
 
             db.session.add(task)
             db.session.commit()
 
-            send_email(task.employee.email, "You've been assigned a new task.", \
-                "{} - {}".format(task.name, task.description), task.assigner.email)
+            if task.status == 'road-blocked':
+                assigner = User.query.get(task.assigner.id)
+
+                send_email(assigner.email, "One of your tasks is road blocked.",
+                           "{} - {}".format(task.name, task.description), task.employee.email)
+
+            elif task.status == 'inactive' or task.status == 'finished':
+                task.active = False
+                db.session.commit()
+
+            else:
+                task.active = True
+                send_email(task.employee.email, "One of your tasks has been edited.",
+                           "{} - {}".format(task.name, task.description), task.assigner.email)
+                db.session.commit()
+
+            for task in mag.tasks:
+                if task.status == 'road-blocked':
+                    mag.status = 'road-blocked'
+                    db.session.commit()
+                    break
+            else:
+                mag.status = 'active'
+                db.session.commit()
+
+            if form.comment.data:
+                user = User.query.get(current_user.get_id())
+
+                comment = Comment(posted_date=datetime.utcnow(),
+                                  text=form.comment.data,
+                                  poster=user,
+                                  task=task)
+
+                db.session.add(comment)
+                db.session.commit()
+
+            #send_email(task.employee.email, "You've been assigned a new task.",
+             #          "{} - {}".format(task.name, task.description), task.assigner.email)
 
             flash('Task successfully added.')
             return redirect(url_for('.magazine', id=mag.id))
@@ -206,10 +260,11 @@ def edit_user(id):
             user.name='{} {}'.format(form.first_name.data, form.last_name.data)
 
             if form.password.data and form.confirm.data:
-                user.password = password=form.password.data
+                user.password = form.password.data
+                db.session.commit()
 
             db.session.commit()
-            flash('User succesfully edited.')
+            flash('User successfully edited.')
             return redirect(url_for('.user', id=id))
 
         return render_template('form.html', form=form)
@@ -254,6 +309,35 @@ def edit_client(id):
     return redirect(url_for('.all_clients'))
 
 
+@main.route('/edit/contact/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_contact(id):
+    contact = Contact.query.get(id)
+
+    if contact is not None:
+        form = EditContact(obj=contact)
+
+        if form.validate_on_submit():
+            contact.first_name = form.first_name.data
+            contact.last_name = form.last_name.data
+            contact.name = '{} {}'.format(form.first_name.data, form.last_name.data)
+            contact.main_email = form.main_email.data
+            contact.main_phone = form.main_phone.data
+
+            if form.secondary_phone.data:
+                contact.secondary_phone = form.secondary_phone.data
+
+            if form.secondary_email.data:
+                contact.secondary_email = form.secondary_email.data
+
+            db.session.add(contact)
+            db.session.commit()
+
+            return redirect(url_for('.client', id=contact.company_id))
+
+        return render_template('form.html', form=form)
+
+
 @main.route('/edit/magazine/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_magazine(id):
@@ -275,8 +359,26 @@ def edit_magazine(id):
 
                 for task in mag.tasks:
                     task.active = False
+                    db.session.add(task)
                     db.session.commit()
 
+            if mag.page_count != form.page_count.data:
+                for page in mag.pages:
+                    db.session.delete(page)
+                    db.session.commit()
+
+                id = mag.id
+
+                count = 1
+
+                while count < form.page_count.data + 1:
+                    page = Page(number=count, magazine_id=id)
+                    db.session.add(page)
+                    db.session.commit()
+                    count += 1
+
+
+            db.session.add(mag)
             db.session.commit()
             flash('Magazine successfully edited.')
             return redirect(url_for('.magazine', id=id))
@@ -302,27 +404,45 @@ def edit_task(id):
             task.name = form.name.data
             task.description = form.description.data
             task.status = form.status.data
-            task.due_date = form.due_date.data
             task.employee = form.employee.data
-            task.note = form.note.data
             task.pages = form.pages.data
+
+            if form.due_date.data:
+                task.due_date = form.due_date.data
 
             db.session.add(task)
             db.session.commit()
+
+            if form.comment.data:
+                user = User.query.get(current_user.get_id())
+
+                comment = Comment(posted_date=datetime.utcnow(),
+                                  text=form.comment.data,
+                                  poster=user,
+                                  task=task)
+
+                db.session.add(comment)
+                db.session.commit()
 
             #Check if I could remove this line and just let the for loop run and check all the tasks
             if task.status == 'road-blocked':
                 assigner = User.query.get(task.assigner.id)
 
-                send_email(assigner.email, "One of your tasks is road blocked.", \
-                "{} - {}".format(task.name, task.description), task.employee.email)
+                send_email(assigner.email, "One of your tasks is road blocked.",
+                           "{} - {}".format(task.name, task.description), task.employee.email)
 
-            elif task.status == 'inactive' or 'finished':
+            elif task.status == 'inactive' or task.status == 'finished':
                 task.active = False
+                db.session.add(task)
+                db.session.commit()
 
             else:
-                send_email(task.employee.email, "One of your tasks has been edited.", \
-                "{} - {}".format(task.name, task.description), task.assigner.email)
+                task.active = True
+                db.session.add(task)
+                db.session.commit()
+
+                send_email(task.employee.email, "One of your tasks has been edited.",
+                           "{} - {}".format(task.name, task.description), task.assigner.email)
 
             for task in mag.tasks:
                 if task.status == 'road-blocked':
@@ -331,8 +451,7 @@ def edit_task(id):
                     break
             else:
                 mag.status = 'active'
-
-            db.session.commit()
+                db.session.commit()
 
             flash('Task successfully edited.')
             return redirect(url_for('.magazine', id=task.magazine_id))
@@ -584,10 +703,8 @@ def call_log():
                     notes=form.notes.data,
                     called_date=datetime.utcnow)
 
-        call = Call(company=form.company.data,
-                    person=form.person.data,
-                    notes=form.notes.data,
-                    )
+        db.session.add(call)
+        db.session.commit(call)
 
     return render_template('form.html', form=form)
 

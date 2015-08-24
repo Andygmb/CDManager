@@ -22,8 +22,9 @@ class User(UserMixin, db.Model):
     active = db.Column(db.Boolean, default=True)
     tasks = db.relationship('Task', backref='employee', lazy='dynamic', foreign_keys='Task.assigned_to')
     assignments = db.relationship('Task', backref='assigner', lazy='dynamic', foreign_keys='Task.assigned_by')
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     magazines = db.relationship('Magazine', backref='sales_person', lazy='dynamic')
+    comments = db.relationship('Comment', backref='poster', lazy='dynamic')
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
     @property
     def password(self):
@@ -35,7 +36,6 @@ class User(UserMixin, db.Model):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
-
 
     def __repr__(self):
         return '{}'.format(self.name)
@@ -57,20 +57,31 @@ class Client(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120))
-    owner = db.Column(db.String(60))
-    owner_email = db.Column(db.String(60))
-    owner_phone = db.Column(db.String(60))
-    contact = db.Column(db.String(60))
-    email = db.Column(db.String(60))
-    phone = db.Column(db.String(25))
     address = db.Column(db.String(100))
+    phone = db.Column(db.String(15))
     active = db.Column(db.Boolean, default=True)
     note = db.Column(db.Text)
     magazines = db.relationship('Magazine', backref='owner', lazy='dynamic')
-
+    contacts = db.relationship('Contact', backref='company', lazy='dynamic')
 
     def __repr__(self):
         return '{}'.format(self.name)
+
+
+class Contact(db.Model):
+
+    __tablename__ = 'contacts'
+
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(25))
+    last_name = db.Column(db.String(25))
+    name = db.Column(db.String(50))
+    position = db.Column(db.String(50))
+    main_email = db.Column(db.String(60), unique=True)
+    secondary_email = db.Column(db.String(60), unique=True)
+    main_phone = db.Column(db.String(15))
+    secondary_phone = db.Column(db.String(15))
+    company_id = db.Column(db.Integer, db.ForeignKey('clients.id'))
 
 
 class Magazine(db.Model):
@@ -90,16 +101,14 @@ class Magazine(db.Model):
     pages = db.relationship('Page', backref='magazine', lazy='dynamic')
     tasks = db.relationship('Task', backref='magazine', lazy='dynamic')
 
-
     def __repr__(self):
         return '{}'.format(self.name)
 
 
-
 pages_tasks = db.Table('pages_tasks',
-    db.Column('page_id', db.Integer, db.ForeignKey('pages.id')),
-    db.Column('task_id', db.Integer, db.ForeignKey('tasks.id'))
-    )
+                       db.Column('page_id', db.Integer, db.ForeignKey('pages.id')),
+                       db.Column('task_id', db.Integer, db.ForeignKey('tasks.id'))
+                       )
 
 
 class Page(db.Model):
@@ -110,7 +119,7 @@ class Page(db.Model):
     number = db.Column(db.String(120))
     magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
     tasks = db.relationship('Task', secondary=pages_tasks,
-        backref=db.backref('pages', lazy='dynamic'), lazy='dynamic')
+                            backref=db.backref('pages', lazy='dynamic'), lazy='dynamic')
 
 
 class Task(db.Model):
@@ -123,15 +132,25 @@ class Task(db.Model):
     create_date = db.Column(db.DateTime)
     due_date = db.Column(db.Date)
     status = db.Column(db.String(50))
-    note = db.Column(db.Text)
     active = db.Column(db.Boolean, default=True)
+    comments = db.relationship('Comment', backref='task', lazy='dynamic')
     magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
     assigned_to = db.Column(db.Integer, db.ForeignKey('users.id'))
     assigned_by = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-
     def __repr__(self):
         return '{}'.format(self.name)
+
+
+class Comment(db.Model):
+
+    __tablename__ = 'comments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    posted_date = db.Column(db.DateTime)
+    text = db.Column(db.Text)
+    posted_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'))
 
 
 class Call(db.Model):

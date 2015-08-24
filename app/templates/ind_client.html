@@ -1,0 +1,49 @@
+<h4>Client Info</h4>
+  <div class="row">
+    <div class="col s12">
+      <div class="card-panel black-text">
+        <div class="card-title">
+          <a class="waves-effect waves-light btn right" href="{{ url_for('main.edit_client', id=client.id) }}">Edit Client</a>
+          <h4><a href="{{ url_for('main.client', id=client.id) }}">{{ client.name }}</a></h4>
+        </div>
+          <p>Contacts:</p>
+              <ul class="collapsible" data-collapsible="accordion">
+                  {% for contact in client.contacts %}
+                  <li>
+                      <div class="collapsible-header">{{ contact.name }}</div>
+                      <div class="collapsible-body">
+
+                      <table>
+                          <tbody>
+                              <tr>
+                                  <td>Position: {{ contact.position }}</td>
+                              </tr>
+                              <tr>
+                                  <td>Main Email: <a href="mailto:{{ contact.main_email }}">{{ contact.main_email }}</a></td>
+                              </tr>
+                              <tr>
+                                  <td>Main Phone: {{ contact.main_phone }}</td>
+                              </tr>
+                              {% if contact.secondary_phone %}
+                              <tr>
+                                  <td>Secondary Phone: {{ contact.secondary_phone }}</td>
+                              </tr>
+                              {% endif %}
+                              {% if contact.secondary_email %}
+                              <tr>
+                                  <td>Seconary Email: {{ contact.secondary_email }}</td>
+                              </tr>
+                              {% endif %}
+                          </tbody>
+                      </table>
+                      </div>
+                  </li>
+                  {% endfor %}
+              </ul>
+          <p>Address: {{ client.address }} </p>
+          <p>Phone: {{ client.phone }} </p>
+          <p>Notes: {{ client.note }}</p>
+
+          <a class='button btn right' href="{{ url_for('main.add_contact', client_id=client.id) }}" >Add Contact</a>
+      </div>
+    </div>

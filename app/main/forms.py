@@ -9,23 +9,30 @@ from ..models import Client, User, Magazine, Page, Role
 def get_all_clients():
     return Client.query.filter_by(active=True).order_by(Client.name).all()
 
+
 def get_all_magazines():
     return Magazine.query.filter_by(active=True).filter_by(published=None).order_by(Magazine.name).all()
+
 
 def get_all_pages():
     return Page.query.filter_by(magazine_id=id).all()
 
+
 def get_all_users():
     return User.query.order_by(User.name).all()
+
 
 def get_all_sales():
     return User.query.filter_by(role_id=4).order_by(User.name).all()
 
+
 def get_all_designers():
     return User.query.filter(User.role_id<=3).all()
 
+
 def get_all_roles():
     return Role.query.all()
+
 
 class MultiCheckboxField(QuerySelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
@@ -34,50 +41,56 @@ class MultiCheckboxField(QuerySelectMultipleField):
 
 class EditUser(Form):
     email = StringField('Email', validators=[InputRequired(), Email()])
-    password = PasswordField('Password', \
-        validators=[EqualTo('confirm', message='Passwords must match')])
+    password = PasswordField('Password',
+                             validators=[EqualTo('confirm', message='Passwords must match')])
     confirm = PasswordField('Confirm Password')
     first_name = StringField('First Name', validators=[InputRequired()])
     last_name = StringField('Last Name', validators=[InputRequired()])
     role = QuerySelectField('Role', query_factory=get_all_roles, get_label='name',
-        validators=[InputRequired()])
+                            validators=[InputRequired()])
     submit = SubmitField()
 
 
 class EditClient(Form):
     name = StringField('Company Name', validators=[InputRequired()])
-    owner = StringField('Owner', validators=[InputRequired()])
-    owner_email = StringField('Owner\'s Email', validators=[InputRequired(), Email()])
-    owner_phone = StringField('Phone', validators=[InputRequired()])
-    contact = StringField('Contact (if not the owner)', validators=[Optional()])
-    email = StringField('Email (if not the owner)', validators=[Optional(), Email()])
-    phone = StringField('Phone (if not the owner)', validators=[Optional()])
     address = StringField('Address', validators=[InputRequired()])
-    note = TextField('Notes')
+    main_phone = StringField('Office Phone')
+    note = StringField('Notes')
+    submit = SubmitField()
+
+
+class EditContact(Form):
+    first_name = StringField('First Name', validators=[InputRequired()])
+    last_name = StringField('Last Name', validators=[InputRequired()])
+    position = StringField('Position', validators=[InputRequired()])
+    main_email = StringField('Main Email', validators=[InputRequired(), Email()])
+    main_phone = StringField('Main Phone', validators=[InputRequired()])
+    secondary_email = StringField('Secondary Email', validators=[Optional(), Email()])
+    secondary_phone = StringField('Secondary Phone', validators=[Optional()])
     submit = SubmitField()
 
 
 class EditMag(Form):
-    owner = QuerySelectField('Client', query_factory=get_all_clients, get_label='name', 
-        validators=[InputRequired()])
+    owner = QuerySelectField('Client', query_factory=get_all_clients, get_label='name',
+                             validators=[InputRequired()])
     published = SelectField('Published', choices=[('not published', 'Not Published'), ('published', 'Published')])
     name = StringField('Magazine Name', validators=[InputRequired()])
-    sales_person = QuerySelectField('Sales Person', query_factory=get_all_sales, get_label='name', 
-        validators=[InputRequired()])
+    sales_person = QuerySelectField('Sales Person', query_factory=get_all_sales, get_label='name',
+                                    validators=[InputRequired()])
     page_count = IntegerField('Page Count', validators=[InputRequired()])
-    note = TextField('Notes')
+    note = StringField('Notes')
     submit = SubmitField()
 
 
 class EditTask(Form):
-    employee = QuerySelectField('Assign To', query_factory=get_all_users, get_label='name', 
-        validators=[InputRequired()])
+    employee = QuerySelectField('Assign To', query_factory=get_all_users, get_label='name',
+                                validators=[InputRequired()])
     name = StringField('Task Name', validators=[InputRequired()])
-    description = TextField('Description')
-    due_date = DateField(format='%m/%d/%Y')
-    status = SelectField('Status', choices=[('active', 'Active'), ('road-blocked', 'Road Blocked'), \
+    description = StringField('Description')
+    due_date = DateField(format='%m/%d/%Y', validators=[Optional()])
+    status = SelectField('Status', choices=[('active', 'Active'), ('road-blocked', 'Road Blocked'),
         ('finished', 'Finished'), ('inactive', 'Inactive')], validators=[InputRequired()])
-    note = TextAreaField('Notes')
+    comment = TextAreaField('Comment (Optional)')
     pages = MultiCheckboxField('Pages', get_label='number')
     submit = SubmitField()
 
@@ -92,6 +105,5 @@ class LogIn(Form):
 class CallLog(Form):
     company = StringField('Company', validators=[InputRequired()])
     person = StringField('Person', validators=[InputRequired()])
-    notes = TextField('Notes')
+    notes = StringField('Notes')
     submit = SubmitField('Submit')
-    
