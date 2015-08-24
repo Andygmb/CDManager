@@ -7,15 +7,15 @@
 {% block content %}
 <div class="container">
 
-    {% include 'ind_client.html' %}
+    <h4>Client Info</h4>
 
-</div>
+    {% include 'ind_client.html' %}
 
   <h4>Magazines</h4>
   {% for mag in client.magazines %}
     {% include 'ind_magazine.html' %}
   {% endfor %}
 
-    
 </div>
+
 {% endblock %}

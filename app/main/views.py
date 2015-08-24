@@ -186,7 +186,7 @@ def add_task(mag):
                         description=form.description.data,
                         create_date=datetime.utcnow(),
                         status=form.status.data,
-                        employee=form.employee.data,
+                        users=form.users.data,
                         assigned_by=current_user.get_id(),
                         pages=form.pages.data,
                         magazine=mag)
@@ -209,8 +209,15 @@ def add_task(mag):
 
             else:
                 task.active = True
-                send_email(task.employee.email, "One of your tasks has been edited.",
-                           "{} - {}".format(task.name, task.description), task.assigner.email)
+
+                for user in task.users:
+                    send_email(user.email, "You've been assigned a new task.",
+                            """{}
+                            Task: {}
+                            Description: {}
+                            Due Date: {}
+                            Assigned by: {}""".format(mag.client_mag, task.name, task.description, task.due_date, task.assigned_by), 
+                            task.assigner.email)
                 db.session.commit()
 
             for task in mag.tasks:
@@ -232,9 +239,6 @@ def add_task(mag):
 
                 db.session.add(comment)
                 db.session.commit()
-
-            #send_email(task.employee.email, "You've been assigned a new task.",
-             #          "{} - {}".format(task.name, task.description), task.assigner.email)
 
             flash('Task successfully added.')
             return redirect(url_for('.magazine', id=mag.id))
@@ -283,25 +287,16 @@ def edit_client(id):
 
         if form.validate_on_submit():
             client.name = form.name.data
-            client.owner = form.owner.data
-            client.owner_email = form.owner_email.data
-            client.owner_phone = form.owner_phone.data
+            client.phone = form.phone.data
             client.address = form.address.data
             client.note = form.note.data
 
-            if not client.contact:
-                client.contact = form.owner.data
-                client.email = form.owner_email.data
-                client.phone = form.owner_phone.data
-
-            else:
-                client.contact = form.contact.data
-                client.email = form.email.data
-                client.phone = form.phone.data
-
+            db.session.add(client)
             db.session.commit()
             flash('Client successfully edited.')
             return redirect(url_for('.client', id=id))
+
+
 
         return render_template('form.html', form=form)
 
@@ -404,7 +399,7 @@ def edit_task(id):
             task.name = form.name.data
             task.description = form.description.data
             task.status = form.status.data
-            task.employee = form.employee.data
+            task.users = form.users.data
             task.pages = form.pages.data
 
             if form.due_date.data:
@@ -441,8 +436,14 @@ def edit_task(id):
                 db.session.add(task)
                 db.session.commit()
 
-                send_email(task.employee.email, "One of your tasks has been edited.",
-                           "{} - {}".format(task.name, task.description), task.assigner.email)
+                for user in task.users:
+                    send_email(user.email, "One of your tasks has been edited.",
+                            """{}
+                            Task: {}
+                            Description: {}
+                            Due Date: {}
+                            Assigned by: {}""".format(mag.client_mag, task.name, task.description, task.due_date, task.assigned_by), 
+                            task.assigner.email)
 
             for task in mag.tasks:
                 if task.status == 'road-blocked':
@@ -639,7 +640,7 @@ def all_magazines():
 @main.route('/tasks')
 @login_required
 def all_tasks():
-    tasks = Task.query.filter_by(active=True).all()
+    tasks = Task.query.filter_by(active=True).order_by(Task.magazine_id.desc()).all()
 
     return render_template('all_tasks.html', tasks=tasks)
 
@@ -690,6 +691,22 @@ def task(id):
         return redirect(url_for('.all_tasks'))
 
     return render_template('task.html', task=task)
+
+
+@main.route('/my_tasks')
+@login_required
+def my_tasks():
+    user = User.query.get(current_user.get_id())
+
+    return render_template('my_tasks.html', user=user)
+
+
+@main.route('/my_assignments')
+@login_required
+def my_assignments():
+    user = User.query.get(current_user.get_id())
+
+    return render_template('my_tasks.html', user=user)
 
 
 @main.route('/call_log', methods=['GET', 'POST'])

@@ -15,7 +15,9 @@
 
   <h4 class="main-info">Tasks</h4>
     {% for task in mag.tasks %}
-      {% include 'ind_task.html' %}
+        {% if task.active==True %}
+            {% include 'ind_task.html' %}
+        {% endif %}
     {% endfor %}
   
 </div>

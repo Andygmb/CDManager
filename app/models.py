@@ -20,7 +20,6 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(25))
     name = db.Column(db.String(50))
     active = db.Column(db.Boolean, default=True)
-    tasks = db.relationship('Task', backref='employee', lazy='dynamic', foreign_keys='Task.assigned_to')
     assignments = db.relationship('Task', backref='assigner', lazy='dynamic', foreign_keys='Task.assigned_by')
     magazines = db.relationship('Magazine', backref='sales_person', lazy='dynamic')
     comments = db.relationship('Comment', backref='poster', lazy='dynamic')
@@ -122,6 +121,11 @@ class Page(db.Model):
                             backref=db.backref('pages', lazy='dynamic'), lazy='dynamic')
 
 
+tasks_users = db.Table('tasks_users',
+    db.Column('task_id', db.Integer, db.ForeignKey('tasks.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id')))
+
+
 class Task(db.Model):
 
     __tablename__ = 'tasks'
@@ -135,7 +139,8 @@ class Task(db.Model):
     active = db.Column(db.Boolean, default=True)
     comments = db.relationship('Comment', backref='task', lazy='dynamic')
     magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
-    assigned_to = db.Column(db.Integer, db.ForeignKey('users.id'))
+    users = db.relationship('User', secondary=tasks_users,
+        backref=db.backref('tasks', lazy='dynamic'))
     assigned_by = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __repr__(self):

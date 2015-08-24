@@ -54,7 +54,7 @@ class EditUser(Form):
 class EditClient(Form):
     name = StringField('Company Name', validators=[InputRequired()])
     address = StringField('Address', validators=[InputRequired()])
-    main_phone = StringField('Office Phone')
+    phone = StringField('Office Phone')
     note = StringField('Notes')
     submit = SubmitField()
 
@@ -83,7 +83,7 @@ class EditMag(Form):
 
 
 class EditTask(Form):
-    employee = QuerySelectField('Assign To', query_factory=get_all_users, get_label='name',
+    users = MultiCheckboxField('Assign To', query_factory=get_all_users, get_label='name',
                                 validators=[InputRequired()])
     name = StringField('Task Name', validators=[InputRequired()])
     description = StringField('Description')
