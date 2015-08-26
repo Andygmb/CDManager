@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}
+    {{ user.name }} <a class="waves-effect waves-light btn blue" href="{{ url_for('main.user', id=user.id) }}">Edit User</a>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    {% if request.path=='/my_tasks' %}
+
+        <h3>My Tasks</h3>
+
+        {% for task in user.tasks %}
+            {% if task.active==True %}
+                {% include 'ind_task.html' %}
+            {% endif %}
+        {% endfor %}
+
+    {% endif %}
+
+    {% if request.path=='/my_assignments' %}
+
+        <h3>My Assigned Tasks</h3>
+
+        {% for task in user.assignments %}
+            {% if task.active==True %}
+                {% include 'ind_task.html' %}
+            {% endif %}
+        {% endfor %}
+
+    {% endif %}
+
+</div>
+{% endblock %}
