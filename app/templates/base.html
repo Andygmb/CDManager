@@ -47,6 +47,14 @@
             <li class="bold"><a href="{{ url_for('main.all_magazines') }}" class="waves-effect waves-orange">Home</a></li>
             <li class="no-padding">
               <ul class="collapsible collapsible-accordion">
+               <li class="bold"><a class="collapsible-header waves-effect waves-orange">My Tasks</a>
+                  <div class="collapsible-body">
+                    <ul>
+                      <li class="bold"><a href="{{ url_for('main.my_tasks') }}" class="waves-effect waves-orange">My Tasks</a></li>
+                      <li class="bold"><a href="{{ url_for('main.my_assignments') }}" class="waves-effect waves-orange">My Assignments</a></li>
+                    </ul>
+                  </div>
+                </li>
                 <li class="bold"><a class="collapsible-header waves-effect waves-orange">Clients</a>
                   <div class="collapsible-body">
                     <ul>
