@@ -2,15 +2,15 @@
   <div class="col s12">
     <div class="card-panel black-text {{ task.status }}">
       <div class="card-title">
-        <a href="{{ url_for('main.edit_task', id=task.id) }}" class="waves-effect waves-light btn right">Edit Task</a>
-        <h5><a href="{{ url_for('main.magazine', id=task.magazine_id) }}">{{ task.magazine.name }}</a></h5>
-        <h5><a href="{{ url_for('main.task', id=task.id) }}">{{ task.name }}</a></h5>
+        <a href="{{ url_for('tasks.edit_task', id=task.id) }}" class="waves-effect waves-light btn right">Edit Task</a>
+        <h5><a href="{{ url_for('magazines.magazine', id=task.magazine_id) }}">{{ task.magazine.name }}</a></h5>
+        <h5><a href="{{ url_for('tasks.task', id=task.id) }}">{{ task.name }}</a></h5>
       </div>
 
       <p>Assigned to: 
       {% if task.users %}
         {% for user in task.users %}
-          <a href="{{ url_for('main.user', id=user.id) }}">{{ user.name }}</a>
+          <a href="{{ url_for('auth.user', id=user.id) }}">{{ user.name }}</a>
         {% endfor %}
       {% endif %}</p>
       <p>Due Date: {% if task.due_date %}

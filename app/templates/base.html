@@ -44,47 +44,47 @@
           </div>
           <ul id="nav-mobile" class="side-nav fixed">
             <li class="logo"><a id="logo-container" href="http://materializecss.com/" class="brand-logo"><img src="http://customdesignmags.com/templates/theme1189/images/logo/logo.png" style="width:150px;"></a></li>
-            <li class="bold"><a href="{{ url_for('main.all_magazines') }}" class="waves-effect waves-orange">Home</a></li>
+            <li class="bold"><a href="{{ url_for('magazines.all_magazines') }}" class="waves-effect waves-orange">Home</a></li>
             <li class="no-padding">
               <ul class="collapsible collapsible-accordion">
                <li class="bold"><a class="collapsible-header waves-effect waves-orange">My Tasks</a>
                   <div class="collapsible-body">
                     <ul>
-                      <li class="bold"><a href="{{ url_for('main.my_tasks') }}" class="waves-effect waves-orange">My Tasks</a></li>
-                      <li class="bold"><a href="{{ url_for('main.my_assignments') }}" class="waves-effect waves-orange">My Assignments</a></li>
+                      <li class="bold"><a href="{{ url_for('tasks.my_tasks') }}" class="waves-effect waves-orange">My Tasks</a></li>
+                      <li class="bold"><a href="{{ url_for('tasks.my_assignments') }}" class="waves-effect waves-orange">My Assignments</a></li>
                     </ul>
                   </div>
                 </li>
                 <li class="bold"><a class="collapsible-header waves-effect waves-orange">Clients</a>
                   <div class="collapsible-body">
                     <ul>
-                      <li><a href="{{ url_for('main.all_clients') }}">All Clients</a></li>
-                      <li><a href="{{ url_for('main.add_client') }}">Add Client</a></li>
+                      <li><a href="{{ url_for('clients.all_clients') }}">All Clients</a></li>
+                      <li><a href="{{ url_for('clients.add_client') }}">Add Client</a></li>
                     </ul>
                   </div>
                 </li>
                 <li class="bold"><a class="collapsible-header  waves-effect waves-orange">Magazines</a>
                   <div class="collapsible-body">
                     <ul>
-                      <li><a href="{{ url_for('main.all_magazines') }}">All Magazines</a></li>
-                      <li><a href="{{ url_for('main.add_magazine') }}">Add Magazine</a></li>
+                      <li><a href="{{ url_for('magazines.all_magazines') }}">All Magazines</a></li>
+                      <li><a href="{{ url_for('magazines.add_magazine') }}">Add Magazine</a></li>
                     </ul>
                   </div>
                 </li>
                 <li class="bold"><a class="collapsible-header  waves-effect waves-orange">Tasks</a>
                   <div class="collapsible-body">
                     <ul>
-                      <li><a href="{{ url_for('main.all_tasks') }}">All Tasks</a></li>
+                      <li><a href="{{ url_for('tasks.all_tasks') }}">All Tasks</a></li>
                     </ul>
                   </div>
                 </li>
                 <li class="bold"><a class="collapsible-header  waves-effect waves-orange">Users</a>
                   <div class="collapsible-body">
                     <ul>
-                      <li><a href="{{ url_for('main.all_users') }}">All Users</a></li>
+                      <li><a href="{{ url_for('auth.all_users') }}">All Users</a></li>
                       {% if current_user.is_authenticated() %}
                       {% if current_user.role.name == 'Admin' %}
-                      <li><a href="{{ url_for('main.add_user') }}">Add User</a></li>
+                      <li><a href="{{ url_for('auth.add_user') }}">Add User</a></li>
                       {% endif %}
                       {% endif %}
                     </ul>
@@ -92,7 +92,7 @@
                 </li>
               </ul>
             </li>
-            <li class="bold"><a href="{{ url_for ('main.logout') }}" class="waves-effect waves-orange">Sign Out</a></li>
+            <li class="bold"><a href="{{ url_for ('auth.logout') }}" class="waves-effect waves-orange">Sign Out</a></li>
           </ul>
         </header>
     {% endblock %}

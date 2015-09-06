@@ -25,7 +25,16 @@ def create_app(config_name):
     login_manager.init_app(app)
     Material(app)
 
-    from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint)
+
+    from .clients import clients as clients_blueprint
+    app.register_blueprint(clients_blueprint, url_prefix='/clients')
+
+    from .magazines import magazines as magazines_blueprint
+    app.register_blueprint(magazines_blueprint, url_prefix='/magazines')
+
+    from .tasks import tasks as tasks_blueprint
+    app.register_blueprint(tasks_blueprint, url_prefix='/tasks')
 
     return app

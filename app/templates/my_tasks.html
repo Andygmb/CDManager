@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block pagetitle %}
-    {{ user.name }} <a class="waves-effect waves-light btn blue" href="{{ url_for('main.user', id=user.id) }}">Edit User</a>
+    {{ user.name }} <a class="waves-effect waves-light btn blue" href="{{ url_for('auth.user', id=user.id) }}">Edit User</a>
 {% endblock %}
 
 {% block content %}
 <div class="container">
 
-    {% if request.path=='/my_tasks' %}
+    {% if request.path=='/tasks/my_tasks' %}
 
         <h3>My Tasks</h3>
 
@@ -19,7 +19,7 @@
 
     {% endif %}
 
-    {% if request.path=='/my_assignments' %}
+    {% if request.path=='/tasks/my_assignments' %}
 
         <h3>My Assigned Tasks</h3>
 

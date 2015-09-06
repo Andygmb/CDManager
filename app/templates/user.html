@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block pagetitle %}
-    {{ user.name }} <a class="waves-effect waves-light btn blue" href="{{ url_for('main.user', id=user.id) }}">Edit User</a>
+    {{ user.name }} <a class="waves-effect waves-light btn blue" href="{{ url_for('auth.user', id=user.id) }}">Edit User</a>
 {% endblock %}
 
 {% block content %}

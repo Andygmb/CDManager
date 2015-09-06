@@ -8,12 +8,12 @@
 <div class="container">
 
   <div class="center-align">
-    <a href="{{ url_for('main.client', id=mag.owner.id) }}" class="waves-effect waves-light btn">{{ mag.owner.name }}</a> <a href="{{ url_for('main.edit_client', id=mag.owner.id) }}" class="waves-effect waves-light btn">Edit Client</a>
+    <a href="{{ url_for('clients.client', id=mag.owner.id) }}" class="waves-effect waves-light btn">{{ mag.owner.name }}</a> <a href="{{ url_for('clients.edit_client', id=mag.owner.id) }}" class="waves-effect waves-light btn">Edit Client</a>
   </div>
 
   {% include 'ind_magazine.html' %}
 
-  <h4 class="main-info">Tasks</h4>
+  <h4 class="auth.info">Tasks</h4>
     {% for task in mag.tasks %}
         {% if task.active==True %}
             {% include 'ind_task.html' %}

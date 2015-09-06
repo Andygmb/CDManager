@@ -14,10 +14,10 @@
       <div class="col s12">
         <div class="card-panel black-text">
           <div class="card-title">
-            <a class="waves-effect waves-light btn right" href="{{ url_for('main.edit_user', id=user.id) }}">Edit User</a>
-            <h4><a href="{{ url_for('main.user', id=user.id) }}">{{ user.name }}</a></h4>
+            <a class="waves-effect waves-light btn right" href="{{ url_for('auth.edit_user', id=user.id) }}">Edit User</a>
+            <h4><a href="{{ url_for('auth.user', id=user.id) }}">{{ user.name }}</a></h4>
           </div>
-          {% for task in user.tasks %}        
+          {% for task in user.tasks %}
             {% include 'ind_task.html' %}
           {% endfor %}
         </div>
