@@ -3,7 +3,7 @@
     <div class="card-panel black-text {{ task.status }}">
       <div class="card-title">
         <a href="{{ url_for('tasks.edit_task', id=task.id) }}" class="waves-effect waves-light btn right">Edit Task</a>
-        <h5><a href="{{ url_for('magazines.magazine', id=task.magazine_id) }}">{{ task.magazine.name }}</a></h5>
+        <h5><a href="{{ url_for('magazines.magazine', id=task.magazine.id) }}">{{ task.magazine.name }}</a></h5>
         <h5><a href="{{ url_for('tasks.task', id=task.id) }}">{{ task.name }}</a></h5>
       </div>
 

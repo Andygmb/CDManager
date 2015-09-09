@@ -198,4 +198,6 @@ def delete_contact(id):
         db.session.delete(contact)
         db.session.commit()
 
-        return redirect(url_for('magazines.magazine', id=request.args.get('client')))
+        return redirect(url_for('clients.client', id=request.args.get('client')))
+
+    return redirect(url_for('clients.client', id=request.args.get('client')))

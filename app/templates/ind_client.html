@@ -9,7 +9,7 @@
               <ul class="collapsible" data-collapsible="accordion">
                   {% for contact in client.contacts %}
                   <li>
-                      <div class="collapsible-header">{{ contact.name }}</div>
+                      <div class="collapsible-header">{{ contact.name }} <a class="right" href="{{ url_for('clients.delete_contact', id=contact.id, client=client.id) }}">x</a></div>
                       <div class="collapsible-body">
 
                       <table>
