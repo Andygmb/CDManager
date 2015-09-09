@@ -2,8 +2,6 @@ from flask import Flask
 from flask_material import Material
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
-from flask.ext.script import Manager
-from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.moment import Moment
 from config import config
 
