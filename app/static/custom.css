@@ -92,3 +92,7 @@ table tbody .active-mag td, table tbody .road-blocked-mag td {
 .collapsible-body {
 	background-color: white;
 }
+
+.edit-button {
+    margin-right: 15px;
+}
