@@ -1,5 +1,8 @@
 <li>
-                      <div class="collapsible-header">{{ contact.name }}</div>
+                      <div class="collapsible-header">{{ contact.name }}
+                          <a class="right" href="{{ url_for('clients.delete_contact', id=contact.id, client=contact.company.id) }}">X</a>
+                          <a class="right edit-button" href="{{ url_for('clients.edit_contact', id=contact.id) }}">Edit</a>
+                      </div>
                       <div class="collapsible-body">
 
                       <table>
