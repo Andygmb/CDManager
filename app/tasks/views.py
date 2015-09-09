@@ -4,7 +4,7 @@ from .. import db
 from ..utilities import sg, send_email
 from ..models import User, Magazine, Task, Comment
 from . import tasks
-from .forms import EditTask
+from .forms import EditTask, EditComment
 from datetime import datetime
 
 
@@ -200,6 +200,31 @@ def edit_task(id):
         return render_template('form.html', form=form)
 
     return redirect(url_for('magazines.all_magazines'))
+
+
+@tasks.route('edit/comment/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_comment(id):
+    comment = Comment.query.get(id)
+
+    if comment is not None:
+        form = EditComment(obj=comment)
+
+        if form.validate_on_submit():
+            comment.poster = form.poster.data
+            comment.body = form.text.data
+            comment.posted_date = form.posted_date.data
+
+            db.session.add(comment)
+            db.session.commit()
+
+            flash('Task successfully edited.')
+            return redirect(url_for('tasks.task', id=comment.task_id))
+
+        return render_template('form.html', form=form)
+
+    flash("No such comment exists")
+    return redirect(url_for('tasks.all_tasks'))
 
 
 @tasks.route('/delete/<int:id>')

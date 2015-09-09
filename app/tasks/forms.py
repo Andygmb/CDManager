@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import StringField, SelectField, DateField, TextAreaField, widgets, SubmitField
-from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField
+from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField, QuerySelectField
 from wtforms.validators import InputRequired, Optional
 from ..models import User
 
@@ -25,4 +25,12 @@ class EditTask(Form):
                          validators=[InputRequired()])
     comment = TextAreaField('Comment (Optional)')
     pages = MultiCheckboxField('Pages', get_label='number')
+    submit = SubmitField()
+
+
+class EditComment(Form):
+    poster = QuerySelectField('Posted By', query_factory=get_all_users, get_label='name',
+                              validators=[InputRequired()])
+    posted_date = DateField(format='%m/%d/%Y', validators=[Optional()])
+    text = TextAreaField('Body', validators=[InputRequired()])
     submit = SubmitField()

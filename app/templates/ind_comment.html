@@ -1,8 +1,13 @@
 <div class="row">
     <div class="col s12">
       <div class="card-panel black-text {{ task.status }} grey lighten-3">
-         <p>Posted by <a href="{{ url_for('auth.user', id=comment.poster.id) }}">{{ comment.poster.name }}</a> {{ moment(timestamp=comment.posted_date,
-            local=True).format('MMMM Do YYYY, h:mm a') }}</p>
+         <p>
+             {% if current_user.role_id==1 %}
+                <a class="right" href="{{ url_for('tasks.edit_comment', id=comment.id) }}">Edit</a>
+             {% endif %}
+             Posted by <a href="{{ url_for('auth.user', id=comment.poster.id) }}">{{ comment.poster.name }}</a> {{ moment(timestamp=comment.posted_date,
+            local=True).format('MMMM Do YYYY, h:mm a') }}
+         </p>
             <p>{{ comment.text }}</p>
       </div>
     </div>
