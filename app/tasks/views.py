@@ -163,8 +163,14 @@ def edit_task(id):
             if task.status == 'road-blocked':
                 assigner = User.query.get(task.assigner.id)
 
-                send_email(assigner.email, "One of your tasks is road blocked.",
-                           "{} - {}".format(task.name, task.description), task.employee.email)
+                for user in task.users:
+                    send_email(user.email, "One of your tasks has been road-blocked.",
+                            """{}
+                            Task: {}
+                            Description: {}
+                            Due Date: {}
+                            Assigned by: {}""".format(mag.client_mag, task.name, task.description, task.due_date, task.assigned_by),
+                            task.assigner.email)
 
             elif task.status == 'inactive' or task.status == 'finished':
                 task.active = False
