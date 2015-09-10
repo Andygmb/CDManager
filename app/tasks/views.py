@@ -202,10 +202,30 @@ def edit_task(id):
     return redirect(url_for('magazines.all_magazines'))
 
 
+@tasks.route('/delete/<int:id>')
+@login_required
+def delete_task(id):
+    task = Task.query.get(id)
+
+    if task:
+        db.session.delete(task)
+        db.session.commit()
+        flash('The task has been deleted.')
+        redirect(url_for('.all_tasks'))
+
+    flash('No such task exists.')
+    return redirect(url_for('.all_tasks'))
+
+
 @tasks.route('edit/comment/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_comment(id):
+
     comment = Comment.query.get(id)
+
+    if current_user.role_id != 1:
+        flash("Your permissions do not enable you to edit comments.")
+        return redirect(url_for('tasks.task', id=comment.id))
 
     if comment is not None:
         form = EditComment(obj=comment)
@@ -227,16 +247,20 @@ def edit_comment(id):
     return redirect(url_for('tasks.all_tasks'))
 
 
-@tasks.route('/delete/<int:id>')
+@tasks.route('delete/comment/<int:id>', methods=['GET', 'POST'])
 @login_required
-def delete_task(id):
-    task = Task.query.get(id)
+def delete_comment(id):
 
-    if task:
-        db.session.delete(task)
-        db.session.commit()
-        flash('The task has been deleted.')
-        redirect(url_for('.all_tasks'))
+    comment = Comment.query.get(id)
 
-    flash('No such task exists.')
-    return redirect(url_for('.all_tasks'))
+    if current_user.role_id != 1:
+        flash("Your permissions do not enable you to delete comments.")
+        return redirect(url_for('tasks.task', id=comment.id))
+
+    id = comment.task_id
+
+    db.session.delete(comment)
+    db.session.commit()
+
+    flash("Comment successfully deleted.")
+    return redirect(url_for('tasks.task', id=id))
