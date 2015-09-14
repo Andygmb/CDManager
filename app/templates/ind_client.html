@@ -9,7 +9,6 @@
               <ul class="collapsible" data-collapsible="accordion">
                   {% for contact in client.contacts %}
                       {% include 'contact.html' %}
-                  </li>
                   {% endfor %}
               </ul>
           <p>Address: {{ client.address }} </p>
