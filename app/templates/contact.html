@@ -1,32 +1,32 @@
 <li>
-                      <div class="collapsible-header">{{ contact.name }}
-                          <a class="right" href="{{ url_for('clients.delete_contact', id=contact.id, client=contact.company.id) }}">X</a>
-                          <a class="right edit-button" href="{{ url_for('clients.edit_contact', id=contact.id) }}">Edit</a>
-                      </div>
-                      <div class="collapsible-body">
+  <div class="collapsible-header">{{ contact.name }}
+      <a class="right" href="{{ url_for('clients.delete_contact', id=contact.id, client=contact.company.id) }}">X</a>
+      <a class="right edit-button" href="{{ url_for('clients.edit_contact', id=contact.id) }}">Edit</a>
+  </div>
+  <div class="collapsible-body">
 
-                      <table>
-                          <tbody>
-                              <tr>
-                                  <td>Position: {{ contact.position }}</td>
-                              </tr>
-                              <tr>
-                                  <td>Main Email: <a href="mailto:{{ contact.main_email }}">{{ contact.main_email }}</a></td>
-                              </tr>
-                              <tr>
-                                  <td>Main Phone: {{ contact.main_phone }}</td>
-                              </tr>
-                              {% if contact.secondary_phone %}
-                              <tr>
-                                  <td>Secondary Phone: {{ contact.secondary_phone }}</td>
-                              </tr>
-                              {% endif %}
-                              {% if contact.secondary_email %}
-                              <tr>
-                                  <td>Seconary Email: {{ contact.secondary_email }}</td>
-                              </tr>
-                              {% endif %}
-                          </tbody>
-                      </table>
-                      </div>
-                  </li>
+      <table>
+          <tbody>
+              <tr>
+                  <td>Position: {{ contact.position }}</td>
+              </tr>
+              <tr>
+                  <td>Main Email: <a href="mailto:{{ contact.main_email }}">{{ contact.main_email }}</a></td>
+              </tr>
+              <tr>
+                  <td>Main Phone: {{ contact.main_phone }}</td>
+              </tr>
+              {% if contact.secondary_phone %}
+              <tr>
+                  <td>Secondary Phone: {{ contact.secondary_phone }}</td>
+              </tr>
+              {% endif %}
+              {% if contact.secondary_email %}
+              <tr>
+                  <td>Secondary Email: {{ contact.secondary_email }}</td>
+              </tr>
+              {% endif %}
+          </tbody>
+      </table>
+  </div>
+</li>

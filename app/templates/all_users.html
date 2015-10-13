@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block pagetitle %}
-  All Clients
+  All Users
 {% endblock %}
 
 {% block content %}
@@ -17,9 +17,19 @@
             <a class="waves-effect waves-light btn right" href="{{ url_for('auth.edit_user', id=user.id) }}">Edit User</a>
             <h4><a href="{{ url_for('auth.user', id=user.id) }}">{{ user.name }}</a></h4>
           </div>
-          {% for task in user.tasks %}
-            {% include 'ind_task.html' %}
-          {% endfor %}
+          <ul class="collapsible" data-collapsible="accordion">
+              <li>
+                  <div class="collapsible-header">
+                      <h4>Tasks</h4>
+                  </div>
+                  <div class="collapsible-body">
+                      {% for task in user.tasks %}
+                        {% include 'ind_task.html' %}
+                      {% endfor %}
+                  </div>
+              </li>
+          </ul>
+
         </div>
       </div>
 
