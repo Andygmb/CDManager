@@ -76,6 +76,7 @@ def edit_magazine(id):
             mag.client_mag = '{} - {}'.format(mag.owner.name, mag.name)
 
             if form.published.data == 'published':
+                mag.active = False
                 mag.published = datetime.utcnow()
 
                 for task in mag.tasks:
