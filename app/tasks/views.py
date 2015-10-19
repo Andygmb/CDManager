@@ -4,7 +4,7 @@ from .. import db
 from ..utilities import sg, send_email
 from ..models import User, Magazine, Task, Comment
 from . import tasks
-from .forms import EditTask, EditComment
+from .forms import EditTask
 from datetime import datetime
 
 
@@ -81,8 +81,8 @@ def add_task(mag):
                             Task: {}
                             Description: {}
                             Due Date: {}
-                            Assigned by: {}""".format(mag.client_mag, task.name, task.description, task.due_date, task.assigned_by),
-                            task.assigner.email)
+                            Assigned by: {}""".format(mag.client_mag, task.name, task.description, task.due_date, assigner.name),
+                            assigner.email)
 
             elif task.status == 'inactive' or task.status == 'finished':
                 task.active = False
@@ -175,8 +175,8 @@ def edit_task(id):
                             Task: {}
                             Description: {}
                             Due Date: {}
-                            Assigned by: {}""".format(mag.client_mag, task.name, task.description, task.due_date, task.assigned_by),
-                            task.assigner.email)
+                            Assigned by: {}""".format(mag.client_mag, task.name, task.description, task.due_date, assigner.name),
+                            assigner.email)
 
             elif task.status == 'inactive' or task.status == 'finished':
                 task.active = False
@@ -227,52 +227,3 @@ def delete_task(id):
 
     flash('No such task exists.')
     return redirect(url_for('.all_tasks'))
-
-
-@tasks.route('edit/comment/<int:id>', methods=['GET', 'POST'])
-@login_required
-def edit_comment(id):
-
-    comment = Comment.query.get(id)
-
-    if current_user.role_id != 1:
-        flash("Your permissions do not enable you to edit comments.")
-        return redirect(url_for('tasks.task', id=comment.id))
-
-    if comment is not None:
-        form = EditComment(obj=comment)
-
-        if form.validate_on_submit():
-            comment.poster = form.poster.data
-            comment.body = form.text.data
-            comment.posted_date = form.posted_date.data
-
-            db.session.add(comment)
-            db.session.commit()
-
-            flash('Task successfully edited.')
-            return redirect(url_for('tasks.task', id=comment.task_id))
-
-        return render_template('form.html', form=form)
-
-    flash("No such comment exists")
-    return redirect(url_for('tasks.all_tasks'))
-
-
-@tasks.route('delete/comment/<int:id>', methods=['GET', 'POST'])
-@login_required
-def delete_comment(id):
-
-    comment = Comment.query.get(id)
-
-    if current_user.role_id != 1:
-        flash("Your permissions do not enable you to delete comments.")
-        return redirect(url_for('tasks.task', id=comment.id))
-
-    id = comment.task_id
-
-    db.session.delete(comment)
-    db.session.commit()
-
-    flash("Comment successfully deleted.")
-    return redirect(url_for('tasks.task', id=id))
