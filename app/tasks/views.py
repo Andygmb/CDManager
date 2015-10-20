@@ -242,3 +242,13 @@ def delete_comment(id):
 
     flash('No such comment exists.')
     return redirect(url_for('.all_tasks'))
+
+
+@tasks.route('/edit/comment/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_comment(id):
+    comment = Comment.query.get(id)
+
+    
+    flash('No such comment exists.')
+    return redirect(url_for('.all_tasks'))
