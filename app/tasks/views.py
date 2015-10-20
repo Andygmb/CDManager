@@ -223,7 +223,22 @@ def delete_task(id):
         db.session.delete(task)
         db.session.commit()
         flash('The task has been deleted.')
-        redirect(url_for('.all_tasks'))
+        return redirect(url_for('.all_tasks'))
 
     flash('No such task exists.')
+    return redirect(url_for('.all_tasks'))
+
+
+@tasks.route('/delete/comment/<int:id>')
+@login_required
+def delete_comment(id):
+    comment = Comment.query.get(id)
+
+    if comment:
+        db.session.delete(comment)
+        db.session.commit()
+        flash('The comment has been deleted.')
+        return redirect(url_for('.all_tasks'))
+
+    flash('No such comment exists.')
     return redirect(url_for('.all_tasks'))
