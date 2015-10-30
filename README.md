@@ -46,7 +46,7 @@ Note: Screenshots coming soon. Any web designers who would like to contribute to
 
 The site currently uses Flask-SQLAlchemy for database management, by default it will create a SQLite database in the application folder. There is no default username inserted into the database so you'll have to create one before you can log in and start creating clients, magazines, tasks and other users. This can be accomplished by running this in flask-script from the terminal:
 
-    $ python run.py shell
+    $ python manage.py shell
     >>> from app import db
     >>> from app.models import User
     >>> user = User(email='youremail@addresshere.com', first_name='First', last_name='Last', password='Your Password here')
