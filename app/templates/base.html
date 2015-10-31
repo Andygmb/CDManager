@@ -14,6 +14,7 @@
             <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='ghpages-materialize.css') }}">
             <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
             <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Inconsolata">
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         {% endblock %}
 
         {% block scripts %}
@@ -25,16 +26,16 @@
             <script>
             $(document).ready(function(){
                 $(" .button-collapse").sideNav();
-                $(".accordion .card-title").siblings().hide();
-                $(".accordion").on("click", function(e){
+                $(".accordion .toggle").parent().siblings().hide();
+                $(".accordion .toggle").on("click", function(e){
                     if ($(this).hasClass("shown")) {
                         $(this).removeClass("shown");
-                        $(".card-title", $(this)).siblings().slideUp();
+                        $(this).parent().siblings().slideUp();
                     } else {
                         $(this).addClass("shown");
-                        $(".card-title", $(this)).siblings().slideDown();
+                        $(this).parent().siblings().slideDown();
                     }
-                })
+                });
             });
 
             </script>

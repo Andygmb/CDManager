@@ -1,6 +1,7 @@
 <div class="col s12">
   <div class="card-panel accordion black-text {{ mag.status }}">
     <div class="card-title" style="clear:both;">
+      <i class="left material-icons toggle" style="cursor:pointer;">reorder</i>
       <a href="{{ url_for('magazines.edit_magazine', id=mag.id) }}" class="waves-effect waves-light btn right">Edit Magazine</a>
       <h4 class="grey-text text-darken-4"><a href="{{ url_for('clients.client', id=mag.owner.id) }}">{{ mag.owner }}</a><br>
           <a href="{{ url_for('magazines.magazine', id=mag.id) }}">{{ mag.name }}</a></h4>
