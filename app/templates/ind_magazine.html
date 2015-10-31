@@ -1,5 +1,5 @@
 <div class="col s12">
-  <div class="card-panel black-text {{ mag.status }}">
+  <div class="card-panel accordion black-text {{ mag.status }}">
     <div class="card-title" style="clear:both;">
       <a href="{{ url_for('magazines.edit_magazine', id=mag.id) }}" class="waves-effect waves-light btn right">Edit Magazine</a>
       <h4 class="grey-text text-darken-4"><a href="{{ url_for('clients.client', id=mag.owner.id) }}">{{ mag.owner }}</a><br>

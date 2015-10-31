@@ -25,7 +25,18 @@
             <script>
             $(document).ready(function(){
                 $(" .button-collapse").sideNav();
+                $(".accordion .card-title").siblings().hide();
+                $(".accordion").on("click", function(e){
+                    if ($(this).hasClass("shown")) {
+                        $(this).removeClass("shown");
+                        $(".card-title", $(this)).siblings().slideUp();
+                    } else {
+                        $(this).addClass("shown");
+                        $(".card-title", $(this)).siblings().slideDown();
+                    }
+                })
             });
+
             </script>
         {% endblock %}
 
