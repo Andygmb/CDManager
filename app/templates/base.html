@@ -22,7 +22,11 @@
             <script type="text/javascript" src="{{ url_for('static', filename='materialize.min.js') }}"></script>
 
             {{ moment.include_moment() }}
-
+            <script>
+            $(document).ready(function(){
+                $(" .button-collapse").sideNav();
+            });
+            </script>
         {% endblock %}
 
         <title>{% block title %}Management System{% endblock %}</title>
